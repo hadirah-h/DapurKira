@@ -15,6 +15,10 @@ class IngredientCreate(IngredientBase):
     pass
 
 
+class IngredientUpdate(IngredientBase):
+    pass
+
+
 class IngredientResponse(IngredientBase):
     id: int
     recipe_id: int
@@ -32,6 +36,10 @@ class PackagingItemBase(BaseModel):
 
 
 class PackagingItemCreate(PackagingItemBase):
+    pass
+
+
+class PackagingItemUpdate(PackagingItemBase):
     pass
 
 
