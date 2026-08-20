@@ -183,7 +183,7 @@ def calculate_labor_cost(
     if hours_worked < 0:
         raise ValueError("Jumlah jam tidak boleh kurang daripada 0")
 
-    if minutes_worked < 0 or minutes_worked >+ 60:
+    if minutes_worked < 0 or minutes_worked >= 60:
         raise ValueError(
             "Jumlah minit mesti antara 0 hingga 59"
         )
@@ -194,7 +194,7 @@ def calculate_labor_cost(
         hours_worked + converted_minutes
     )
 
-    labor_cost = hourly_rate * hours_worked
+    labor_cost = hourly_rate * total_hours_worked
 
     return labor_cost
 
