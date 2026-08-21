@@ -1,4 +1,6 @@
 from datetime import datetime
+from enum import Enum
+
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -50,8 +52,20 @@ class PackagingItemResponse(PackagingItemBase):
     model_config = ConfigDict(from_attributes=True)
 
 
+class RecipeCategory(str, Enum):
+    TRADITIONAL_KUIH = "Kuih Tradisional"
+    CAKE_DESSERT = "Kek & Dessert"
+    BREAD_PASTRY = "Roti & Pastri"
+    FROZEN_FOOD = "Makanan Sejuk Beku"
+    MAIN_DISH = "Hidangan Utama"
+    SNACK = "Snek & Kudapan"
+    DRINK = "Minuman"
+    SAUCE_PASTE = "Sambal, Sos & Pes"
+    OTHER = "Lain-lain"
+
 class RecipeBase(BaseModel):
     name: str = Field(min_length=1, max_length=100)
+    category: RecipeCategory = RecipeCategory.OTHER
     yield_qty: int = Field(gt=0, default=1)
     target_markup: float = Field(ge=0, default=50.0)
     custom_selling_price: float | None = Field(default=None, gt=0)

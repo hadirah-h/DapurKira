@@ -9,6 +9,13 @@ class Recipe(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), nullable=False)
+
+    category = Column(
+        String(50),
+        nullable=False,
+        default="Lain-lain"
+    )
+    
     yield_qty = Column(Integer, nullable=False, default=1)
     target_markup = Column(Float, nullable=False, default=50.0)
     custom_selling_price = Column(Float, nullable=True)

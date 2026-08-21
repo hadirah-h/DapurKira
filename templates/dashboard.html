@@ -207,10 +207,39 @@
         </a>
     </div>
 
-    {% if recipe_cards %}
-        <div class="product-grid">
+{% if recipe_cards %}
+    <div
+        class="category-filters"
+        aria-label="Tapis produk mengikut kategori"
+    >
+        <button
+            class="category-filter active"
+            type="button"
+            data-category-filter="Semua"
+            aria-pressed="true"
+        >
+            Semua
+        </button>
+
+        {% for category in categories %}
+            <button
+                class="category-filter"
+                type="button"
+                data-category-filter="{{ category }}"
+                aria-pressed="false"
+            >
+                {{ category }}
+            </button>
+        {% endfor %}
+    </div>
+
+    <div class="product-grid">
+
             {% for item in recipe_cards %}
-                <article class="product-card">
+                <article 
+                    class="product-card"
+                    data-category="{{ item.recipe.category }}"
+                >
                     <div class="product-heading">
                         <div class="product-title">
                             <span class="product-icon">
@@ -219,7 +248,7 @@
 
                             <div>
                                 <span class="product-label">
-                                    Produk
+                                    {{ item.recipe.category }}
                                 </span>
 
                                 <h3>
@@ -335,4 +364,44 @@
         Jom Kira
     </a>
 </section>
+
+<script>
+    const categoryButtons = document.querySelectorAll(
+        ".category-filter"
+    );
+
+    const productCards = document.querySelectorAll(
+        ".product-card"
+    );
+
+    categoryButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            const selectedCategory =
+                button.dataset.categoryFilter;
+
+            categoryButtons.forEach(function (item) {
+                const isActive = item === button;
+
+                item.classList.toggle(
+                    "active",
+                    isActive
+                );
+
+                item.setAttribute(
+                    "aria-pressed",
+                    isActive
+                );
+            });
+
+            productCards.forEach(function (card) {
+                const showCard =
+                    selectedCategory === "Semua" ||
+                    card.dataset.category ===
+                    selectedCategory;
+
+                card.hidden = !showCard;
+            });
+        });
+    });
+</script>
 {% endblock %}

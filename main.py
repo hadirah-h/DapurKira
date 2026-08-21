@@ -463,10 +463,16 @@ def home(
             "result": result
         })
 
+    categories = sorted({
+        recipe.category
+        for recipe in recipes
+    })
+
     return templates.TemplateResponse(
         request=request,
         name="dashboard.html",
         context={
-            "recipe_cards": recipe_cards
+            "recipe_cards": recipe_cards,
+            "categories": categories
         }
     )
