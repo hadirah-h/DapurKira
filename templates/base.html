@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="DapurKira membantu homepreneur mengira kos produk dan harga jual."
+    >
+
+    <title>
+        {% block title %}DapurKira{% endblock %}
+    </title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', path='/style.css') }}"
+    >
+</head>
+
+<body>
+    <header class="site-header">
+        <nav class="navbar">
+            <a class="brand" href="/">
+                <span class="brand-icon">&#127856;</span>
+                <span>DapurKira</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="/">Utama</a>
+                <a href="/#modes">Cara Kira</a>
+                <a href="/#products">Produk Saya</a>
+
+                <a class="nav-button" href="/docs">
+                    Demo API
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>
+            DapurKira. Kira kos dengan jelas,
+            tetapkan harga dengan yakin.
+        </p>
+    </footer>
+</body>
+</html>

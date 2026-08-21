@@ -1,0 +1,338 @@
+{% extends "base.html" %}
+
+{% block title %}
+    DapurKira | Kira Kos & Harga Jual
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <span class="eyebrow">
+            Untuk homepreneur Malaysia
+        </span>
+
+        <h1>
+            Kos lebih jelas.<br>
+            Harga lebih yakin.
+        </h1>
+
+        <p class="hero-description">
+            Tak perlu pening kira seorang-seorang. Cik Kira ada
+            untuk bantu semak kos dan cadangkan harga jual
+            untuk bisnes anda.
+        </p>
+
+        <div class="hero-actions">
+            <a class="button primary" href="#modes">
+                Jom Kira
+            </a>
+
+            <a class="button secondary" href="#products">
+                Lihat Produk
+            </a>
+        </div>
+    </div>
+
+    <aside class="assistant-card">
+        <div class="assistant-header">
+            <div class="assistant-avatar">
+                CK
+            </div>
+
+            <div>
+                <span class="online-label">
+                    Sedia membantu
+                </span>
+
+                <h2>Cik Kira</h2>
+            </div>
+        </div>
+
+        <p>
+            “Jom kita kira sama-sama. Harga jual tak boleh
+            agak-agak tau!”
+        </p>
+
+        <div class="assistant-list">
+            <span>&#10003; Kos bahan dan packaging</span>
+            <span>&#10003; Upah dan kos tambahan</span>
+            <span>&#10003; Cadangan harga jual</span>
+        </div>
+    </aside>
+</section>
+
+<section class="summary-grid">
+    <article class="summary-card">
+        <div class="summary-icon">
+            &#128230;
+        </div>
+
+        <div>
+            <span>Produk disimpan</span>
+            <strong>{{ recipe_cards | length }}</strong>
+        </div>
+    </article>
+
+    <article class="summary-card">
+        <div class="summary-icon">
+            &#10024;
+        </div>
+
+        <div>
+            <span>Mode pengiraan</span>
+            <strong>3</strong>
+        </div>
+    </article>
+
+    <article class="summary-card">
+        <div class="summary-icon">
+            RM
+        </div>
+
+        <div>
+            <span>Mata wang</span>
+            <strong>Ringgit Malaysia</strong>
+        </div>
+    </article>
+</section>
+
+<section id="modes" class="section">
+    <div class="section-heading">
+        <span class="eyebrow">
+            Pilih cara kira
+        </span>
+
+        <h2>
+            Nak kira yang mana hari ini?
+        </h2>
+
+        <p>
+            Pilih cara pengiraan yang paling sesuai dengan
+            keperluan bisnes anda.
+        </p>
+    </div>
+
+    <div class="mode-grid">
+        <article class="mode-card">
+            <div class="mode-number">
+                01
+            </div>
+
+            <div class="mode-icon">
+                &#9889;
+            </div>
+
+            <h3>Kira Pantas</h3>
+
+            <p>
+                Dah tahu jumlah kos satu batch? Masukkan kos,
+                kuantiti hasil dan markup untuk dapatkan
+                anggaran harga jual.
+            </p>
+
+            <a class="text-link" href="/docs">
+                Cuba Kira Pantas
+                <span>&rarr;</span>
+            </a>
+        </article>
+
+        <article class="mode-card featured">
+            <span class="popular-label">
+                Paling lengkap
+            </span>
+
+            <div class="mode-number">
+                02
+            </div>
+
+            <div class="mode-icon">
+                &#129534;
+            </div>
+
+            <h3>Kos Produk</h3>
+
+            <p>
+                Jom kira satu per satu, daripada bahan dan
+                packaging sehinggalah upah kerja dan kos lain.
+            </p>
+
+            <a class="text-link" href="#products">
+                Lihat Produk
+                <span>&rarr;</span>
+            </a>
+        </article>
+
+        <article class="mode-card">
+            <div class="mode-number">
+                03
+            </div>
+
+            <div class="mode-icon">
+                &#127919;
+            </div>
+
+            <h3>Target Jual</h3>
+
+            <p>
+                Nak tahu berapa unit perlu dijual? Cik Kira
+                boleh bantu kira untuk cover kos dan capai
+                target pendapatan.
+            </p>
+
+            <a class="text-link" href="/docs">
+                Kira Target Jual
+                <span>&rarr;</span>
+            </a>
+        </article>
+    </div>
+</section>
+
+<section id="products" class="section products-section">
+    <div class="section-heading products-heading">
+        <div>
+            <span class="eyebrow">
+                Rekod produk
+            </span>
+
+            <h2>Produk Saya</h2>
+
+            <p>
+                Semua ringkasan kos dan harga produk anda
+                boleh dilihat di sini.
+            </p>
+        </div>
+
+        <a class="button primary small-button" href="/docs">
+            Tambah Produk
+        </a>
+    </div>
+
+    {% if recipe_cards %}
+        <div class="product-grid">
+            {% for item in recipe_cards %}
+                <article class="product-card">
+                    <div class="product-heading">
+                        <div class="product-title">
+                            <span class="product-icon">
+                                &#127851;
+                            </span>
+
+                            <div>
+                                <span class="product-label">
+                                    Produk
+                                </span>
+
+                                <h3>
+                                    {{ item.recipe.name }}
+                                </h3>
+                            </div>
+                        </div>
+
+                        <span class="yield-badge">
+                            {{ item.recipe.yield_qty }} unit
+                        </span>
+                    </div>
+
+                    {% if item.result %}
+                        <div class="price-grid">
+                            <div class="price-item">
+                                <span>Kos seunit</span>
+
+                                <strong>
+                                    RM{{ "%.2f" | format(
+                                        item.result.cost_per_item
+                                    ) }}
+                                </strong>
+                            </div>
+
+                            <div class="price-item highlighted-price">
+                                <span>Harga cadangan</span>
+
+                                <strong>
+                                    RM{{ "%.2f" | format(
+                                        item.result.selling_price
+                                    ) }}
+                                </strong>
+                            </div>
+
+                            <div class="price-item">
+                                <span>Margin</span>
+
+                                <strong>
+                                    {{ "%.2f" | format(
+                                        item.result.resulting_margin
+                                    ) }}%
+                                </strong>
+                            </div>
+                        </div>
+
+                        <div class="product-footer">
+                            <span>
+                                Markup:
+                                {{ "%.0f" | format(
+                                    item.recipe.target_markup
+                                ) }}%
+                            </span>
+
+                            <a href="/docs">
+                                Lihat butiran &rarr;
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="incomplete">
+                            <strong>
+                                Maklumat kos belum lengkap
+                            </strong>
+
+                            <p>
+                                Tambah bahan atau packaging dahulu,
+                                kemudian Cik Kira akan bantu kira.
+                            </p>
+                        </div>
+                    {% endif %}
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">
+                &#129530;
+            </div>
+
+            <h3>
+                Belum ada produk disimpan
+            </h3>
+
+            <p>
+                Tak apa, kita mula perlahan-lahan. Produk yang
+                anda tambah nanti akan dipaparkan di sini.
+            </p>
+
+            <a class="button primary" href="/docs">
+                Tambah Produk Pertama
+            </a>
+        </div>
+    {% endif %}
+</section>
+
+<section class="closing-banner">
+    <div>
+        <span class="eyebrow">
+            Pesanan Cik Kira
+        </span>
+
+        <h2>
+            Dah tahu kos, barulah senang nak letak harga.
+        </h2>
+
+        <p>
+            Tak boleh main agak-agak tau! Jom semak kos supaya
+            setiap jualan lebih berbaloi.
+        </p>
+    </div>
+
+    <a class="button dark-button" href="#modes">
+        Jom Kira
+    </a>
+</section>
+{% endblock %}

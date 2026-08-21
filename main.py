@@ -1,5 +1,9 @@
+from pathlib import Path
 from contextlib import asynccontextmanager
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException,  Request, status
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 
 import crud
@@ -21,6 +25,18 @@ async def lifespan(_: FastAPI):
 app = FastAPI(
     title="DapurKira API",
     lifespan=lifespan
+)
+
+BASE_DIR = Path(__file__).resolve().parent
+
+app.mount(
+    "/static",
+    StaticFiles(directory=BASE_DIR / "static"),
+    name="static"
+)
+
+templates = Jinja2Templates(
+    directory=BASE_DIR / "templates"
 )
 
 @app.post(
@@ -425,10 +441,32 @@ def break_even_endpoint(
 
 
 # Home page
-@app.get("/")
-def home():
-    """Display a welcome message"""
-    app_name = "DapurKira"
+@app.get(
+    "/",
+    response_class=HTMLResponse
+)
+def home(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    recipes = crud.get_recipes(db)
+    recipe_cards = []
 
-    return {"message": f" 👩🏻‍🍳 Welcome to {app_name}! 👩🏻‍🍳"}
+    for recipe in recipes:
+        try:
+            result = calculate_saved_recipe(recipe)
+        except ValueError:
+            result = None
 
+        recipe_cards.append({
+            "recipe": recipe,
+            "result": result
+        })
+
+    return templates.TemplateResponse(
+        request=request,
+        name="dashboard.html",
+        context={
+            "recipe_cards": recipe_cards
+        }
+    )
