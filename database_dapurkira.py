@@ -1,8 +1,14 @@
+from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-# Location and name of the SQLite database
-DATABASE_URL = "sqlite:///.dapurkira.db"
+DATABASE_PATH = (
+    Path(__file__).resolve().parent / ".dapurkira.db"
+)
+
+DATABASE_URL = (
+    f"sqlite:///{DATABASE_PATH.as_posix()}"
+)
 
 # Create the database connection
 engine = create_engine(
@@ -28,4 +34,3 @@ def get_db():
         yield db
     finally:
         db.close()
-        

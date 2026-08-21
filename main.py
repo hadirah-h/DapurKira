@@ -1,12 +1,27 @@
+from contextlib import asynccontextmanager
 from fastapi import Depends, FastAPI, HTTPException, status
 from sqlalchemy.orm import Session
 
 import crud
 import schemas
-from database_dapurkira import get_db
+import models
+from database_dapurkira import engine, get_db
+from recipe_calculator import calculate_saved_recipe
+from calculations import (
+    calculate_break_even_result,
+    calculate_quick_pricing,
+)
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    models.Base.metadata.create_all(bind=engine)
+    yield
 
 # Create the FastAPI application
-app = FastAPI()
+app = FastAPI(
+    title="DapurKira API",
+    lifespan=lifespan
+)
 
 @app.post(
     "/recipes/",
@@ -153,7 +168,7 @@ def read_recipe_ingredients_endpoint(
     "/ingredients/{ingredient_id}",
     response_model=schemas.IngredientResponse
 )
-def read_ingredient_engdpoint(
+def read_ingredient_endpoint(
     ingredient_id: int,
     db: Session = Depends(get_db)
 ):
@@ -181,9 +196,9 @@ def update_ingredient_endpoint(
     db: Session = Depends(get_db)
 ):
     ingredient = crud.update_ingredient(
-    db,
-    ingredient_id,
-    ingredient_data
+        db,
+        ingredient_id,
+        ingredient_data
     )
 
     if ingredient is None:
@@ -333,6 +348,80 @@ def delete_packaging_item_endpoint(
         )
 
     return None
+
+
+@app.get(
+    "/recipes/{recipe_id}/calculation",
+    response_model=schemas.RecipeCalculationResponse
+)
+def calculate_recipe_endpoint(
+    recipe_id: int,
+    db: Session = Depends(get_db)
+):
+    recipe = crud.get_recipe(
+        db,
+        recipe_id
+    )
+
+    if recipe is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Resipi tidak dijumpai"
+        )
+
+    try:
+        return calculate_saved_recipe(recipe)
+    except ValueError as error:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(error)
+        ) from error
+
+
+@app.post(
+    "/quick-calculate",
+    response_model=schemas.QuickCalculationResponse
+)
+def quick_calculation_endpoint(
+    calculation_data: schemas.QuickCalculationRequest
+):
+    try:
+        return calculate_quick_pricing(
+            calculation_data.total_batch_cost,
+            calculation_data.yield_qty,
+            calculation_data.target_markup,
+            calculation_data.custom_selling_price
+        )
+    except ValueError as error:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(error)
+        ) from error
+
+
+@app.post(
+        "/break-even",
+        response_model=schemas.BreakEvenResponse
+)
+def break_even_endpoint(
+    calculation_data: schemas.BreakEvenRequest
+):
+    try:
+        return calculate_break_even_result(
+            calculation_data.cost_per_item,
+            calculation_data.selling_price,
+            calculation_data.other_monthly_fixed_cost,
+            calculation_data.total_utility_bill,
+            calculation_data.business_utility_percentage,
+            calculation_data.equipment_cost,
+            calculation_data.recovery_months,
+            calculation_data.target_monthly_income
+        )
+    except ValueError as error:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(error)
+        ) from error
 
 
 # Home page

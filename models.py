@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from database_dapurkira import Base
@@ -49,7 +50,7 @@ class Ingredient(Base):
         back_populates="ingredients"
     )
 
-  
+
 class PackagingItem(Base):
     __tablename__ = "packaging_items"
 

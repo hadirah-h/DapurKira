@@ -88,6 +88,51 @@ def calculate_markup_from_price(cost_per_item, custom_selling_price):
 
     return calculated_markup
 
+def calculate_quick_pricing(
+    total_batch_cost,
+    yield_qty,
+    target_markup,
+    custom_selling_price=None
+):
+    """Calculate pricing results for Quick Calculator mode"""
+
+    cost_per_item = calculate_cost_per_item(
+        total_batch_cost,
+        yield_qty
+    )
+
+    if custom_selling_price is not None:
+        selling_price = custom_selling_price
+        calculated_markup = calculate_markup_from_price(
+            cost_per_item,
+            selling_price
+        )
+    else:
+        selling_price = calculate_selling_price(
+            cost_per_item,
+            target_markup
+        )
+        calculated_markup = target_markup
+
+    profit_per_item = calculate_profit_per_item(
+        cost_per_item,
+        selling_price
+    )
+
+    resulting_margin = calculate_resulting_margin(
+        cost_per_item,
+        selling_price
+    )
+
+    return {
+        "total_batch_cost": round_money(total_batch_cost),
+        "cost_per_item": round_money(cost_per_item),
+        "selling_price": round_money(selling_price),
+        "profit_per_item": round_money(profit_per_item),
+        "resulting_margin": round(resulting_margin, 2),
+        "calculated_markup": round(calculated_markup, 2),
+    }
+
 # ============================================
 # [MODE 2: Detailed Cost Calculator]
 #=============================================
@@ -420,6 +465,107 @@ def calculate_target_income_units(
     )
 
     return target_income_units
+
+def calculate_break_even_result(
+        cost_per_item,
+        selling_price,
+        other_monthly_fixed_cost=0,
+        total_utility_bill=0,
+        business_utility_percentage=0,
+        equipment_cost=0,
+        recovery_months=1,
+        target_monthly_income=None
+):
+    """Calculate the complete monthly break-even result"""
+
+    utility_business_cost = calculate_business_utility_cost(
+        total_utility_bill,
+        business_utility_percentage
+    )
+
+    if equipment_cost > 0:
+        monthly_equipment_cost = (
+            calculate_monthly_equipment_cost(
+                equipment_cost,
+                recovery_months
+            )
+        )
+    else:
+        monthly_equipment_cost = 0
+
+    total_monthly_fixed_cost = (
+        calculate_total_monthly_fixed_cost(
+            other_monthly_fixed_cost,
+            utility_business_cost,
+            monthly_equipment_cost
+        )
+    )
+
+    profit_per_item = calculate_profit_per_item(
+        cost_per_item,
+        selling_price
+    )
+
+    break_even_units_monthly = calculate_break_even_units(
+        total_monthly_fixed_cost,
+        selling_price,
+        cost_per_item
+    )
+
+    break_even_units_weekly = math.ceil(
+        break_even_units_monthly / 4
+    )
+
+    break_even_units_daily = math.ceil(
+        break_even_units_monthly / 30
+    )
+
+    target_income_units_monthly = None
+    target_income_units_weekly = None
+    target_income_units_daily = None
+
+    if target_monthly_income is not None:
+        target_income_units_monthly = (
+            calculate_target_income_units(
+                total_monthly_fixed_cost,
+                target_monthly_income,
+                selling_price,
+                cost_per_item
+            )
+        )
+
+        target_income_units_weekly = math.ceil(
+            target_income_units_monthly / 4
+        )
+
+        target_income_units_daily = math.ceil(
+            target_income_units_monthly / 30
+        )
+
+    return {
+        "utility_business_cost": round_money(
+            utility_business_cost
+        ),
+        "monthly_equipment_cost": round_money(
+            monthly_equipment_cost
+        ),
+        "total_monthly_fixed_cost": round_money(
+            total_monthly_fixed_cost
+        ),
+        "profit_per_item": round_money(profit_per_item),
+        "break_even_units_monthly": break_even_units_monthly,
+        "break_even_units_weekly": break_even_units_weekly,
+        "break_even_units_daily": break_even_units_daily,
+        "target_income_units_monthly": (
+            target_income_units_monthly
+        ),
+        "target_income_units_weekly": (
+            target_income_units_weekly
+        ),
+        "target_income_units_daily": (
+            target_income_units_daily
+        ),
+    }
 
 # =======================
 # TEST
