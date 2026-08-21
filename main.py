@@ -440,6 +440,20 @@ def break_even_endpoint(
         ) from error
 
 
+# Quick calculation web page
+@app.get(
+    "/kira-pantas",
+    response_class=HTMLResponse
+)
+def quick_calculation_page(
+    request: Request
+):
+    return templates.TemplateResponse(
+        request=request,
+        name="calculators/quick_calculate.html"
+    )
+
+
 # Home page
 @app.get(
     "/",

@@ -6,6 +6,26 @@
 
 {% block content %}
 <section class="hero">
+    <div
+        class="floating-sparkles"
+        aria-hidden="true"
+    >
+        <span class="floating-sparkle sparkle-one">
+            &#10022;
+        </span>
+
+        <span class="floating-sparkle sparkle-two">
+            &#10022;
+        </span>
+
+        <span class="floating-sparkle sparkle-three">
+            &#10022;
+        </span>
+
+        <span class="floating-sparkle sparkle-four">
+            &#10022;
+        </span>
+    </div>
     <div class="hero-content">
         <span class="eyebrow">
             Untuk homepreneur Malaysia
@@ -35,9 +55,51 @@
 
     <aside class="assistant-card">
         <div class="assistant-header">
-            <div class="assistant-avatar">
+            <div
+            class="cik-kira-mascot"
+            role="img"
+            aria-label="Ilustrasi Cik Kira memakai tudung dan memegang kalkulator"
+>
+        <span
+            class="hijab-tail hijab-tail-left"
+            aria-hidden="true"
+        ></span>
+
+        <span
+            class="hijab-tail hijab-tail-right"
+            aria-hidden="true"
+        ></span>
+
+        <div class="mascot-head" aria-hidden="true">
+            <span class="mascot-face"></span>
+
+            <span class="mascot-eye eye-left"></span>
+            <span class="mascot-eye eye-right"></span>
+
+            <span class="mascot-cheek cheek-left"></span>
+            <span class="mascot-cheek cheek-right"></span>
+
+            <span class="mascot-smile"></span>
+
+            <span class="hijab-pin">
+                &#10022;
+            </span>
+        </div>
+
+        <div class="mascot-body" aria-hidden="true">
+            <span class="mascot-arm waving-arm"></span>
+            <span class="mascot-arm holding-arm"></span>
+
+            <span class="mascot-apron">
                 CK
-            </div>
+            </span>
+
+            <span class="mascot-calculator">
+                <span class="calculator-screen"></span>
+                <span class="calculator-buttons"></span>
+            </span>
+        </div>
+    </div>
 
             <div>
                 <span class="online-label">
@@ -57,6 +119,25 @@
             <span>&#10003; Kos bahan dan packaging</span>
             <span>&#10003; Upah dan kos tambahan</span>
             <span>&#10003; Cadangan harga jual</span>
+        </div>
+        <div
+            class="kitchen-pot-scene"
+            aria-hidden="true"
+        >
+            <span class="steam-line steam-one"></span>
+            <span class="steam-line steam-two"></span>
+            <span class="steam-line steam-three"></span>
+
+            <div class="pot-lid">
+                <span class="pot-knob"></span>
+            </div>
+
+            <div class="pot-body">
+                <span class="pot-highlight"></span>
+            </div>
+
+            <span class="pot-handle pot-handle-left"></span>
+            <span class="pot-handle pot-handle-right"></span>
         </div>
     </aside>
 </section>
@@ -130,7 +211,7 @@
                 anggaran harga jual.
             </p>
 
-            <a class="text-link" href="/docs">
+            <a class="text-link" href="/kira-pantas">
                 Cuba Kira Pantas
                 <span>&rarr;</span>
             </a>
@@ -365,43 +446,7 @@
     </a>
 </section>
 
-<script>
-    const categoryButtons = document.querySelectorAll(
-        ".category-filter"
-    );
-
-    const productCards = document.querySelectorAll(
-        ".product-card"
-    );
-
-    categoryButtons.forEach(function (button) {
-        button.addEventListener("click", function () {
-            const selectedCategory =
-                button.dataset.categoryFilter;
-
-            categoryButtons.forEach(function (item) {
-                const isActive = item === button;
-
-                item.classList.toggle(
-                    "active",
-                    isActive
-                );
-
-                item.setAttribute(
-                    "aria-pressed",
-                    isActive
-                );
-            });
-
-            productCards.forEach(function (card) {
-                const showCard =
-                    selectedCategory === "Semua" ||
-                    card.dataset.category ===
-                    selectedCategory;
-
-                card.hidden = !showCard;
-            });
-        });
-    });
-</script>
+<script
+    src="{{ url_for('static', path='/js/dashboard.js') }}"
+></script>
 {% endblock %}
