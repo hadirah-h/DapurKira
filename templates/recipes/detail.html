@@ -1,0 +1,816 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ recipe.name }} | DapurKira
+{% endblock %}
+
+{% block content %}
+
+<section class="calculator-page product-detail-page">
+
+    <header class="calculator-header">
+
+        <a class="back-link" href="/">
+            <span>&larr;</span>
+            Kembali ke dashboard
+        </a>
+
+        <span class="eyebrow">
+            {{ recipe.category }}
+        </span>
+
+        <h1>{{ recipe.name }}</h1>
+
+        <p>
+            Satu batch menghasilkan
+            <strong>{{ recipe.yield_qty }} unit</strong>
+            dengan target markup
+            <strong>
+                {{ "%.0f" | format(recipe.target_markup) }}%
+            </strong>.
+        </p>
+
+    </header>
+
+    <div class="detail-actions">
+        <a
+            class="button secondary"
+            href="/produk/{{ recipe.id }}/edit"
+        >
+            Edit produk
+        </a>
+
+        <button
+            id="delete-recipe-button"
+            class="danger-button"
+            type="button"
+            data-recipe-id="{{ recipe.id }}"
+        >
+            Padam produk
+        </button>
+    </div>
+
+    {% if result %}
+
+        <section class="detail-summary">
+
+            <div class="main-result">
+                <span>Harga jual dicadangkan</span>
+
+                <strong>
+                    RM{{ "%.2f" | format(result.selling_price) }}
+                </strong>
+            </div>
+
+            <div class="result-grid">
+
+                <div class="result-item">
+                    <span>Jumlah kos batch</span>
+
+                    <strong>
+                        RM{{ "%.2f" | format(
+                            result.total_batch_cost
+                        ) }}
+                    </strong>
+                </div>
+
+                <div class="result-item">
+                    <span>Kos seunit</span>
+
+                    <strong>
+                        RM{{ "%.2f" | format(
+                            result.cost_per_item
+                        ) }}
+                    </strong>
+                </div>
+
+                <div class="result-item profit-result">
+                    <span>Untung seunit</span>
+
+                    <strong>
+                        RM{{ "%.2f" | format(
+                            result.profit_per_item
+                        ) }}
+                    </strong>
+                </div>
+
+                <div class="result-item">
+                    <span>Margin keuntungan</span>
+
+                    <strong>
+                        {{ "%.2f" | format(
+                            result.resulting_margin
+                        ) }}%
+                    </strong>
+                </div>
+
+            </div>
+
+        </section>
+
+    {% else %}
+
+        <div class="detail-notice">
+            <span>&#128161;</span>
+
+            <p>
+                Tambah sekurang-kurangnya satu bahan untuk
+                mula melihat pengiraan kos produk.
+            </p>
+        </div>
+
+    {% endif %}
+
+
+    <!-- Ingredients -->
+
+    <section class="detail-section">
+
+        <div class="detail-section-heading">
+
+            <div>
+                <span class="eyebrow">
+                    Langkah 1
+                </span>
+
+                <h2>Bahan-bahan</h2>
+
+                <p>
+                    Masukkan harga pembelian dan jumlah yang
+                    digunakan untuk satu batch.
+                </p>
+            </div>
+
+            <span class="record-count">
+                {{ recipe.ingredients | length }} bahan
+            </span>
+
+        </div>
+
+        {% if recipe.ingredients %}
+
+            <div class="record-list">
+
+                {% for ingredient in recipe.ingredients %}
+
+                    <article class="record-card">
+
+                        <div class="record-card-main">
+
+                            <span class="record-icon">
+                                &#129367;
+                            </span>
+
+                            <div>
+                                <h3>{{ ingredient.name }}</h3>
+
+                                <p>
+                                    Dibeli:
+                                    RM{{ "%.2f" | format(
+                                        ingredient.purchase_price
+                                    ) }}
+                                    untuk
+                                    {{ ingredient.purchase_size }}
+                                    {{ ingredient.purchase_unit }}
+                                </p>
+
+                                <p>
+                                    Digunakan:
+                                    {{ ingredient.quantity_used }}
+                                    {{ ingredient.used_unit }}
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="delete-record-button"
+                            type="button"
+                            data-ingredient-id="{{ ingredient.id }}"
+                        >
+                            Padam
+                        </button>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="small-empty-state">
+
+                <span>&#129367;</span>
+
+                <div>
+                    <h3>Belum ada bahan</h3>
+
+                    <p>
+                        Jom masukkan bahan pertama untuk produk ini.
+                    </p>
+                </div>
+
+            </div>
+
+        {% endif %}
+
+        <details
+            class="add-record-section"
+            {% if not recipe.ingredients %}open{% endif %}
+        >
+
+            <summary>
+                Tambah bahan
+                <span>+</span>
+            </summary>
+
+            <form
+                id="ingredient-form"
+                data-recipe-id="{{ recipe.id }}"
+            >
+
+                <div class="form-group">
+
+                    <label for="ingredient-name">
+                        Nama bahan
+                    </label>
+
+                    <input
+                        id="ingredient-name"
+                        class="form-input"
+                        name="name"
+                        type="text"
+                        maxlength="100"
+                        placeholder="Contoh: Butter"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="ingredient-price">
+                            Harga pembelian
+                        </label>
+
+                        <div class="input-with-prefix">
+
+                            <span>RM</span>
+
+                            <input
+                                id="ingredient-price"
+                                name="purchase_price"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                inputmode="decimal"
+                                placeholder="Contoh: 18.00"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="ingredient-size">
+                            Berat/jumlah dibeli
+                        </label>
+
+                        <input
+                            id="ingredient-size"
+                            class="form-input"
+                            name="purchase_size"
+                            type="number"
+                            min="0.01"
+                            step="0.01"
+                            inputmode="decimal"
+                            placeholder="Contoh: 250"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="ingredient-purchase-unit">
+                        Unit pembelian
+                    </label>
+
+                    <select
+                        id="ingredient-purchase-unit"
+                        class="form-input"
+                        name="purchase_unit"
+                        required
+                    >
+                        <option value="" disabled selected>
+                            Pilih unit
+                        </option>
+
+                        <option value="g">g</option>
+                        <option value="kg">kg</option>
+                        <option value="ml">ml</option>
+                        <option value="L">L</option>
+                        <option value="tsp">tsp</option>
+                        <option value="tbsp">tbsp</option>
+                        <option value="pcs">pcs</option>
+                    </select>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="ingredient-quantity-used">
+                            Jumlah digunakan
+                        </label>
+
+                        <input
+                            id="ingredient-quantity-used"
+                            class="form-input"
+                            name="quantity_used"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            inputmode="decimal"
+                            placeholder="Contoh: 100"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="ingredient-used-unit">
+                            Unit digunakan
+                        </label>
+
+                        <select
+                            id="ingredient-used-unit"
+                            class="form-input"
+                            name="used_unit"
+                            required
+                        >
+                            <option value="" disabled selected>
+                                Pilih unit
+                            </option>
+
+                            <option value="g">g</option>
+                            <option value="kg">kg</option>
+                            <option value="ml">ml</option>
+                            <option value="L">L</option>
+                            <option value="tsp">tsp</option>
+                            <option value="tbsp">tbsp</option>
+                            <option value="pcs">pcs</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div
+                    id="ingredient-form-error"
+                    class="form-error"
+                    role="alert"
+                    hidden
+                ></div>
+
+                <button
+                    class="button primary"
+                    type="submit"
+                >
+                    Simpan bahan
+                </button>
+
+            </form>
+
+        </details>
+
+    </section>
+
+
+    <!-- Packaging -->
+
+    <section class="detail-section packaging-section">
+
+        <div class="detail-section-heading">
+
+            <div>
+                <span class="eyebrow">
+                    Langkah 2
+                </span>
+
+                <h2>Packaging</h2>
+
+                <p>
+                    Tambah semua packaging yang digunakan seperti
+                    kotak, plastik, ribbon, sticker atau bekas.
+                </p>
+            </div>
+
+            <span class="record-count">
+                {{ recipe.packaging_items | length }} item
+            </span>
+
+        </div>
+
+        {% if recipe.packaging_items %}
+
+            <div class="record-list">
+
+                {% for packaging in recipe.packaging_items %}
+
+                    <article class="record-card">
+
+                        <div class="record-card-main">
+
+                            <span class="record-icon packaging-icon">
+                                &#128230;
+                            </span>
+
+                            <div>
+                                <h3>{{ packaging.name }}</h3>
+
+                                <p>
+                                    Dibeli:
+                                    RM{{ "%.2f" | format(
+                                        packaging.purchase_price
+                                    ) }}
+                                    untuk
+                                    {{ packaging.purchase_size }}
+                                    {{ packaging.purchase_unit }}
+                                </p>
+
+                                <p>
+                                    Digunakan:
+                                    {{ packaging.quantity_used }}
+                                    {{ packaging.used_unit }}
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="delete-record-button"
+                            type="button"
+                            data-packaging-id="{{ packaging.id }}"
+                        >
+                            Padam
+                        </button>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="small-empty-state">
+
+                <span>&#128230;</span>
+
+                <div>
+                    <h3>Belum ada packaging</h3>
+
+                    <p>
+                        Bahagian ini optional jika produk anda
+                        tidak memerlukan packaging.
+                    </p>
+                </div>
+
+            </div>
+
+        {% endif %}
+
+        <details class="add-record-section">
+
+            <summary>
+                Tambah packaging
+                <span>+</span>
+            </summary>
+
+            <form
+                id="packaging-form"
+                data-recipe-id="{{ recipe.id }}"
+            >
+
+                <div class="form-group">
+
+                    <label for="packaging-name">
+                        Nama packaging
+                    </label>
+
+                    <input
+                        id="packaging-name"
+                        class="form-input"
+                        name="name"
+                        type="text"
+                        maxlength="100"
+                        placeholder="Contoh: Kotak makanan"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="packaging-price">
+                            Harga pembelian
+                        </label>
+
+                        <div class="input-with-prefix">
+
+                            <span>RM</span>
+
+                            <input
+                                id="packaging-price"
+                                name="purchase_price"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                inputmode="decimal"
+                                placeholder="Contoh: 12.00"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="packaging-size">
+                            Jumlah dibeli
+                        </label>
+
+                        <input
+                            id="packaging-size"
+                            class="form-input"
+                            name="purchase_size"
+                            type="number"
+                            min="0.01"
+                            step="0.01"
+                            inputmode="decimal"
+                            placeholder="Contoh: 50"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="packaging-purchase-unit">
+                        Unit pembelian
+                    </label>
+
+                    <select
+                        id="packaging-purchase-unit"
+                        class="form-input"
+                        name="purchase_unit"
+                        required
+                    >
+                        <option value="" disabled selected>
+                            Pilih unit
+                        </option>
+
+                        <option value="pcs">pcs</option>
+                        <option value="cm">cm</option>
+                        <option value="m">m</option>
+                        <option value="ml">ml</option>
+                        <option value="L">L</option>
+                    </select>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="packaging-quantity-used">
+                            Jumlah digunakan
+                        </label>
+
+                        <input
+                            id="packaging-quantity-used"
+                            class="form-input"
+                            name="quantity_used"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            inputmode="decimal"
+                            placeholder="Contoh: 20"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="packaging-used-unit">
+                            Unit digunakan
+                        </label>
+
+                        <select
+                            id="packaging-used-unit"
+                            class="form-input"
+                            name="used_unit"
+                            required
+                        >
+                            <option value="" disabled selected>
+                                Pilih unit
+                            </option>
+
+                            <option value="pcs">pcs</option>
+                            <option value="cm">cm</option>
+                            <option value="m">m</option>
+                            <option value="ml">ml</option>
+                            <option value="L">L</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div
+                    id="packaging-form-error"
+                    class="form-error"
+                    role="alert"
+                    hidden
+                ></div>
+
+                <button
+                    class="button primary"
+                    type="submit"
+                >
+                    Simpan packaging
+                </button>
+
+            </form>
+
+        </details>
+
+    </section>
+
+
+    <!-- Cost breakdown -->
+
+    {% if result %}
+
+        <section class="detail-section cost-breakdown-section">
+
+            <div class="detail-section-heading">
+
+                <div>
+                    <span class="eyebrow">
+                        Langkah 3
+                    </span>
+
+                    <h2>Ringkasan kos</h2>
+
+                    <p>
+                        Semak bagaimana jumlah kos satu batch
+                        dikira.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="cost-breakdown-list">
+
+                <div class="cost-breakdown-item">
+                    <div>
+                        <span class="cost-icon ingredient-cost-icon">
+                            &#129367;
+                        </span>
+
+                        <div>
+                            <strong>Kos bahan</strong>
+                            <p>
+                                {{ recipe.ingredients | length }}
+                                bahan digunakan
+                            </p>
+                        </div>
+                    </div>
+
+                    <strong>
+                        RM{{ "%.2f" | format(
+                            result.total_ingredient_cost
+                        ) }}
+                    </strong>
+                </div>
+
+                <div class="cost-breakdown-item">
+                    <div>
+                        <span class="cost-icon packaging-cost-icon">
+                            &#128230;
+                        </span>
+
+                        <div>
+                            <strong>Kos packaging</strong>
+                            <p>
+                                {{ recipe.packaging_items | length }}
+                                item digunakan
+                            </p>
+                        </div>
+                    </div>
+
+                    <strong>
+                        RM{{ "%.2f" | format(
+                            result.total_packaging_cost
+                        ) }}
+                    </strong>
+                </div>
+
+                <div class="cost-breakdown-item">
+                    <div>
+                        <span class="cost-icon labor-cost-icon">
+                            &#9201;
+                        </span>
+
+                        <div>
+                            <strong>Upah kerja</strong>
+
+                            {% if recipe.hourly_rate > 0 %}
+                                <p>
+                                    RM{{ "%.2f" | format(
+                                        recipe.hourly_rate
+                                    ) }}
+                                    sejam &middot;
+                                    {{ recipe.hours_worked }} jam
+                                    {{ recipe.minutes_worked }} minit
+                                </p>
+                            {% else %}
+                                <p>Upah kerja tidak dimasukkan</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <strong>
+                        RM{{ "%.2f" | format(
+                            result.labor_cost
+                        ) }}
+                    </strong>
+                </div>
+
+                <div class="cost-breakdown-item">
+                    <div>
+                        <span class="cost-icon other-cost-icon">
+                            +
+                        </span>
+
+                        <div>
+                            <strong>Kos lain</strong>
+                            <p>Kos tambahan untuk satu batch</p>
+                        </div>
+                    </div>
+
+                    <strong>
+                        RM{{ "%.2f" | format(
+                            result.other_cost
+                        ) }}
+                    </strong>
+                </div>
+
+                <div class="cost-breakdown-total">
+                    <div>
+                        <span>Jumlah kos satu batch</span>
+
+                        <p>
+                            Untuk {{ recipe.yield_qty }} unit
+                        </p>
+                    </div>
+
+                    <strong>
+                        RM{{ "%.2f" | format(
+                            result.total_batch_cost
+                        ) }}
+                    </strong>
+                </div>
+
+            </div>
+
+        </section>
+
+    {% endif %}
+
+</section>
+
+<script
+
+    src="{{ url_for('static', path='/js/recipe_detail.js') }}"
+    defer
+></script>
+
+{% endblock %}

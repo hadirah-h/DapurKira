@@ -1,0 +1,432 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit {{ recipe.name }} | DapurKira
+{% endblock %}
+
+{% block content %}
+
+<section class="calculator-page product-form-page">
+
+    <header class="calculator-header">
+
+        <a
+            class="back-link"
+            href="/produk/{{ recipe.id }}"
+        >
+            <span>&larr;</span>
+            Kembali ke produk
+        </a>
+
+        <span class="eyebrow">
+            Edit produk
+        </span>
+
+        <h1>{{ recipe.name }}</h1>
+
+        <p>
+            Kemas kini maklumat produk, markup,
+            upah kerja atau kos lain.
+        </p>
+
+    </header>
+
+    <div class="calculator-layout">
+
+        <div class="calculator-form-card">
+
+            <form
+                id="recipe-edit-form"
+                data-recipe-id="{{ recipe.id }}"
+            >
+
+                <div class="form-group">
+
+                    <label for="recipe-name">
+                        Nama produk
+                    </label>
+
+                    <input
+                        id="recipe-name"
+                        class="form-input"
+                        name="name"
+                        type="text"
+                        maxlength="100"
+                        value="{{ recipe.name }}"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="recipe-category">
+                        Kategori produk
+                    </label>
+
+                    <select
+                        id="recipe-category"
+                        class="form-input"
+                        name="category"
+                        required
+                    >
+                        <option
+                            value="Kuih Tradisional"
+                            {% if recipe.category == "Kuih Tradisional" %}
+                                selected
+                            {% endif %}
+                        >
+                            Kuih Tradisional
+                        </option>
+
+                        <option
+                            value="Kek &amp; Dessert"
+                            {% if recipe.category == "Kek & Dessert" %}
+                                selected
+                            {% endif %}
+                        >
+                            Kek &amp; Dessert
+                        </option>
+
+                        <option
+                            value="Roti &amp; Pastri"
+                            {% if recipe.category == "Roti & Pastri" %}
+                                selected
+                            {% endif %}
+                        >
+                            Roti &amp; Pastri
+                        </option>
+
+                        <option
+                            value="Makanan Frozen"
+                            {% if recipe.category == "Makanan Frozen" %}
+                                selected
+                            {% endif %}
+                        >
+                            Makanan Frozen
+                        </option>
+
+                        <option
+                            value="Hidangan Utama"
+                            {% if recipe.category == "Hidangan Utama" %}
+                                selected
+                            {% endif %}
+                        >
+                            Hidangan Utama
+                        </option>
+
+                        <option
+                            value="Snek &amp; Kudapan"
+                            {% if recipe.category == "Snek & Kudapan" %}
+                                selected
+                            {% endif %}
+                        >
+                            Snek &amp; Kudapan
+                        </option>
+
+                        <option
+                            value="Minuman"
+                            {% if recipe.category == "Minuman" %}
+                                selected
+                            {% endif %}
+                        >
+                            Minuman
+                        </option>
+
+                        <option
+                            value="Sambal, Sos &amp; Pes"
+                            {% if recipe.category == "Sambal, Sos & Pes" %}
+                                selected
+                            {% endif %}
+                        >
+                            Sambal, Sos &amp; Pes
+                        </option>
+
+                        <option
+                            value="Lain-lain"
+                            {% if recipe.category == "Lain-lain" %}
+                                selected
+                            {% endif %}
+                        >
+                            Lain-lain
+                        </option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="recipe-yield">
+                        Jumlah unit untuk satu batch
+                    </label>
+
+                    <div class="input-with-suffix">
+
+                        <input
+                            id="recipe-yield"
+                            name="yield_qty"
+                            type="number"
+                            min="1"
+                            step="1"
+                            inputmode="numeric"
+                            value="{{ recipe.yield_qty }}"
+                            required
+                        >
+
+                        <span>unit</span>
+
+                    </div>
+
+                </div>
+
+                <div class="form-group markup-group">
+
+                    <div class="markup-heading">
+
+                        <div>
+                            <label for="recipe-markup">
+                                Target markup
+                            </label>
+
+                            <p class="field-help">
+                                Tambahan harga berdasarkan kos seunit.
+                            </p>
+                        </div>
+
+                        <output
+                            id="recipe-markup-output"
+                            for="recipe-markup"
+                        >
+                            {{ "%.0f" | format(
+                                recipe.target_markup
+                            ) }}%
+                        </output>
+
+                    </div>
+
+                    <input
+                        id="recipe-markup"
+                        class="markup-slider"
+                        name="target_markup"
+                        type="range"
+                        min="0"
+                        max="300"
+                        step="10"
+                        value="{{ recipe.target_markup }}"
+                    >
+
+                </div>
+
+                <details
+                    id="edit-custom-price-option"
+                    class="optional-price"
+                    {% if recipe.custom_selling_price is not none %}
+                        open
+                    {% endif %}
+                >
+
+                    <summary>
+                        Saya mahu tetapkan harga jual sendiri
+                        <span>Pilihan tambahan</span>
+                    </summary>
+
+                    <div class="form-group optional-price-field">
+
+                        <label for="custom-selling-price">
+                            Harga jual sendiri
+                        </label>
+
+                        <p class="field-help">
+                            Harga ini akan digunakan menggantikan
+                            cadangan berdasarkan markup.
+                        </p>
+
+                        <div class="input-with-prefix">
+
+                            <span>RM</span>
+
+                            <input
+                                id="custom-selling-price"
+                                name="custom_selling_price"
+                                type="number"
+                                min="0.01"
+                                step="0.01"
+                                inputmode="decimal"
+                                value="{{
+                                    recipe.custom_selling_price
+                                    if recipe.custom_selling_price
+                                    is not none
+                                    else ''
+                                }}"
+                                placeholder="Contoh: 12.00"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </details>
+
+                <details
+                    class="optional-section"
+                    {% if
+                        recipe.hourly_rate > 0
+                        or recipe.hours_worked > 0
+                        or recipe.minutes_worked > 0
+                        or recipe.other_cost > 0
+                    %}
+                        open
+                    {% endif %}
+                >
+
+                    <summary>
+                        Upah kerja dan kos lain
+                        <span>Pilihan tambahan</span>
+                    </summary>
+
+                    <div class="optional-fields">
+
+                        <div class="form-group">
+
+                            <label for="hourly-rate">
+                                Upah sejam
+                            </label>
+
+                            <div class="input-with-prefix">
+
+                                <span>RM</span>
+
+                                <input
+                                    id="hourly-rate"
+                                    name="hourly_rate"
+                                    type="number"
+                                    min="0"
+                                    step="0.01"
+                                    inputmode="decimal"
+                                    value="{{ recipe.hourly_rate }}"
+                                >
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+
+                                <label for="hours-worked">
+                                    Jumlah jam
+                                </label>
+
+                                <div class="input-with-suffix">
+
+                                    <input
+                                        id="hours-worked"
+                                        name="hours_worked"
+                                        type="number"
+                                        min="0"
+                                        step="1"
+                                        inputmode="numeric"
+                                        value="{{ recipe.hours_worked }}"
+                                    >
+
+                                    <span>jam</span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="minutes-worked">
+                                    Tambahan minit
+                                </label>
+
+                                <div class="input-with-suffix">
+
+                                    <input
+                                        id="minutes-worked"
+                                        name="minutes_worked"
+                                        type="number"
+                                        min="0"
+                                        max="59"
+                                        step="1"
+                                        inputmode="numeric"
+                                        value="{{ recipe.minutes_worked }}"
+                                    >
+
+                                    <span>minit</span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="other-cost">
+                                Kos lain untuk satu batch
+                            </label>
+
+                            <div class="input-with-prefix">
+
+                                <span>RM</span>
+
+                                <input
+                                    id="other-cost"
+                                    name="other_cost"
+                                    type="number"
+                                    min="0"
+                                    step="0.01"
+                                    inputmode="decimal"
+                                    value="{{ recipe.other_cost }}"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </details>
+
+                <div
+                    id="recipe-edit-error"
+                    class="form-error"
+                    role="alert"
+                    hidden
+                ></div>
+
+                <div class="form-actions">
+
+                    <a
+                        class="button secondary"
+                        href="/produk/{{ recipe.id }}"
+                    >
+                        Batal
+                    </a>
+
+                    <button
+                        class="button primary"
+                        type="submit"
+                    >
+                        Simpan perubahan
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+<script
+    src="{{ url_for('static', path='/js/recipe_edit.js') }}"
+    defer
+></script>
+
+{% endblock %}

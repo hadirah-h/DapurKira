@@ -56,7 +56,7 @@ class RecipeCategory(str, Enum):
     TRADITIONAL_KUIH = "Kuih Tradisional"
     CAKE_DESSERT = "Kek & Dessert"
     BREAD_PASTRY = "Roti & Pastri"
-    FROZEN_FOOD = "Makanan Sejuk Beku"
+    FROZEN_FOOD = "Makanan Frozen"
     MAIN_DISH = "Hidangan Utama"
     SNACK = "Snek & Kudapan"
     DRINK = "Minuman"

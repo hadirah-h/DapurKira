@@ -440,6 +440,86 @@ def break_even_endpoint(
         ) from error
 
 
+# Edit product web page
+@app.get(
+    "/produk/{recipe_id}/edit",
+    response_class=HTMLResponse
+)
+def edit_recipe_page(
+    request: Request,
+    recipe_id: int,
+    db: Session = Depends(get_db)
+):
+    recipe = crud.get_recipe(
+        db,
+        recipe_id
+    )
+
+    if recipe is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Produk tidak dijumpai"
+        )
+
+    return templates.TemplateResponse(
+        request=request,
+        name="recipes/edit.html",
+        context={
+            "recipe": recipe
+        }
+    )
+
+
+# Product detail web page
+@app.get(
+    "/produk/{recipe_id}",
+    response_class=HTMLResponse
+)
+def recipe_detail_page(
+    request: Request,
+    recipe_id: int,
+    db: Session = Depends(get_db)
+):
+    recipe = crud.get_recipe(
+        db,
+        recipe_id
+    )
+
+    if recipe is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Produk tidak dijumpai"
+        )
+
+    try:
+        result = calculate_saved_recipe(recipe)
+    except ValueError:
+        result = None
+
+    return templates.TemplateResponse(
+        request=request,
+        name="recipes/detail.html",
+        context={
+            "recipe": recipe,
+            "result": result
+        }
+    )
+
+
+# New product web page
+@app.get(
+    "/produk-baru",
+    response_class=HTMLResponse
+)
+def new_recipe_page(
+    request: Request
+):
+    return templates.TemplateResponse(
+        request=request,
+        name="recipes/form.html"
+    )
+
+
 # Quick calculation web page
 @app.get(
     "/kira-pantas",

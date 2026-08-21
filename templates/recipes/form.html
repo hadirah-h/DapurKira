@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+
+{% block title %}
+Tambah Produk | DapurKira
+{% endblock %}
+
+{% block content %}
+
+<section class="calculator-page product-form-page">
+
+    <header class="calculator-header">
+        <a class="back-link" href="/">
+            <span>&larr;</span>
+            Kembali ke dashboard
+        </a>
+
+        <span class="eyebrow">
+            Mode 02 &middot; Kos Produk
+        </span>
+
+        <h1>Tambah produk baru</h1>
+
+        <p>
+            Mulakan dengan maklumat asas produk.
+            Bahan dan packaging boleh ditambah selepas ini.
+        </p>
+    </header>
+
+    <div class="calculator-layout">
+
+        <div class="calculator-form-card">
+
+            <form id="recipe-form">
+
+                <div class="form-group">
+                    <label for="recipe-name">
+                        Nama produk
+                    </label>
+
+                    <p class="field-help">
+                        Contoh: Brownies Premium atau Karipap Frozen.
+                    </p>
+
+                    <input
+                        id="recipe-name"
+                        class="form-input"
+                        name="name"
+                        type="text"
+                        maxlength="100"
+                        placeholder="Masukkan nama produk"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="recipe-category">
+                        Kategori produk
+                    </label>
+
+                    <p class="field-help">
+                        Pilih kategori yang paling sesuai.
+                    </p>
+
+                    <select
+                        id="recipe-category"
+                        class="form-input"
+                        name="category"
+                        required
+                    >
+                        <option value="" disabled selected>
+                            Pilih kategori
+                        </option>
+
+                        <option value="Kuih Tradisional">
+                            Kuih Tradisional
+                        </option>
+
+                        <option value="Kek &amp; Dessert">
+                            Kek &amp; Dessert
+                        </option>
+
+                        <option value="Roti &amp; Pastri">
+                            Roti &amp; Pastri
+                        </option>
+
+                        <option value="Makanan Frozen">
+                            Makanan Frozen
+                        </option>
+
+                        <option value="Hidangan Utama">
+                            Hidangan Utama
+                        </option>
+
+                        <option value="Snek &amp; Kudapan">
+                            Snek &amp; Kudapan
+                        </option>
+
+                        <option value="Minuman">
+                            Minuman
+                        </option>
+
+                        <option value="Sambal, Sos &amp; Pes">
+                            Sambal, Sos &amp; Pes
+                        </option>
+
+                        <option value="Lain-lain">
+                            Lain-lain
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="recipe-yield">
+                        Berapa unit untuk satu batch?
+                    </label>
+
+                    <p class="field-help">
+                        Contoh: 20 bekas, pek, keping atau balang.
+                    </p>
+
+                    <div class="input-with-suffix">
+                        <input
+                            id="recipe-yield"
+                            name="yield_qty"
+                            type="number"
+                            min="1"
+                            step="1"
+                            inputmode="numeric"
+                            placeholder="Contoh: 20"
+                            required
+                        >
+
+                        <span>unit</span>
+                    </div>
+                </div>
+
+                <div class="form-group markup-group">
+
+                    <div class="markup-heading">
+
+                        <div>
+                            <label for="recipe-markup">
+                                Target markup
+                            </label>
+
+                            <p class="field-help">
+                                Anda boleh ubah nilai ini kemudian.
+                            </p>
+                        </div>
+
+                        <output
+                            id="recipe-markup-output"
+                            for="recipe-markup"
+                        >
+                            50%
+                        </output>
+
+                    </div>
+
+                    <input
+                        id="recipe-markup"
+                        class="markup-slider"
+                        name="target_markup"
+                        type="range"
+                        min="0"
+                        max="300"
+                        step="10"
+                        value="50"
+                    >
+
+                </div>
+
+                <details class="optional-section">
+
+                    <summary>
+                        Upah kerja dan kos lain
+                        <span>Pilihan tambahan</span>
+                    </summary>
+
+                    <div class="optional-fields">
+
+                        <div class="form-group">
+                            <label for="hourly-rate">
+                                Upah sejam
+                            </label>
+
+                            <div class="input-with-prefix">
+                                <span>RM</span>
+
+                                <input
+                                    id="hourly-rate"
+                                    name="hourly_rate"
+                                    type="number"
+                                    min="0"
+                                    step="0.01"
+                                    inputmode="decimal"
+                                    placeholder="Contoh: 10.00"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+                                <label for="hours-worked">
+                                    Jumlah jam
+                                </label>
+
+                                <div class="input-with-suffix">
+                                    <input
+                                        id="hours-worked"
+                                        name="hours_worked"
+                                        type="number"
+                                        min="0"
+                                        step="1"
+                                        inputmode="numeric"
+                                        placeholder="0"
+                                    >
+
+                                    <span>jam</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="minutes-worked">
+                                    Tambahan minit
+                                </label>
+
+                                <div class="input-with-suffix">
+                                    <input
+                                        id="minutes-worked"
+                                        name="minutes_worked"
+                                        type="number"
+                                        min="0"
+                                        max="59"
+                                        step="1"
+                                        inputmode="numeric"
+                                        placeholder="0"
+                                    >
+
+                                    <span>minit</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="other-cost">
+                                Kos lain untuk satu batch
+                            </label>
+
+                            <p class="field-help">
+                                Contoh: caj penghantaran atau kos tambahan.
+                            </p>
+
+                            <div class="input-with-prefix">
+                                <span>RM</span>
+
+                                <input
+                                    id="other-cost"
+                                    name="other_cost"
+                                    type="number"
+                                    min="0"
+                                    step="0.01"
+                                    inputmode="decimal"
+                                    placeholder="0.00"
+                                >
+                            </div>
+                        </div>
+
+                    </div>
+
+                </details>
+
+                <div
+                    id="recipe-form-error"
+                    class="form-error"
+                    role="alert"
+                    hidden
+                ></div>
+
+                <div class="form-actions">
+                    <a class="button secondary" href="/">
+                        Batal
+                    </a>
+
+                    <button
+                        class="button primary"
+                        type="submit"
+                    >
+                        Simpan dan tambah bahan
+                        <span>&rarr;</span>
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+<script
+    src="{{ url_for('static', path='/js/recipe_form.js') }}"
+    defer
+></script>
+
+{% endblock %}
