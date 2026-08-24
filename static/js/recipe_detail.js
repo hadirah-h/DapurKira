@@ -1,3 +1,7 @@
+const deleteRecipeButton = document.querySelector(
+    "#delete-recipe-button"
+);
+
 const ingredientForm = document.querySelector(
     "#ingredient-form"
 );
@@ -30,8 +34,24 @@ const ingredientFormError = document.querySelector(
     "#ingredient-form-error"
 );
 
+const editIngredientButtons = document.querySelectorAll(
+    ".edit-record-button[data-ingredient-id]"
+);
+
 const deleteIngredientButtons = document.querySelectorAll(
-    "[data-ingredient-id]"
+    ".delete-record-button[data-ingredient-id]"
+);
+
+const ingredientFormSection = document.querySelector(
+    "#ingredient-form-section"
+);
+
+const ingredientSubmitButton = document.querySelector(
+    "#ingredient-submit-button"
+);
+
+const cancelIngredientEditButton = document.querySelector(
+    "#cancel-ingredient-edit"
 );
 
 
@@ -69,8 +89,24 @@ const packagingFormError = document.querySelector(
     "#packaging-form-error"
 );
 
+const editPackagingButtons = document.querySelectorAll(
+    ".edit-record-button[data-packaging-id]"
+);
+
 const deletePackagingButtons = document.querySelectorAll(
-    "[data-packaging-id]"
+    ".delete-record-button[data-packaging-id]"
+);
+
+const packagingFormSection = document.querySelector(
+    "#packaging-form-section"
+);
+
+const packagingSubmitButton = document.querySelector(
+    "#packaging-submit-button"
+);
+
+const cancelPackagingEditButton = document.querySelector(
+    "#cancel-packaging-edit"
 );
 
 
@@ -123,6 +159,49 @@ function readApiError(result, fallbackMessage) {
 }
 
 
+async function deleteRecipe() {
+    const recipeId = deleteRecipeButton.dataset.recipeId;
+
+    const confirmed = window.confirm(
+        "Padam produk ini? Semua bahan dan packaging "
+        + "di dalamnya juga akan dipadam."
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    deleteRecipeButton.disabled = true;
+    deleteRecipeButton.textContent = "Memadam...";
+
+    try {
+        const response = await fetch(
+            `/recipes/${recipeId}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "Produk tidak dapat dipadam."
+            );
+        }
+
+        window.location.href = "/";
+
+    } catch (error) {
+        window.alert(
+            error.message
+            || "Cik Kira tidak dapat memadam produk."
+        );
+
+        deleteRecipeButton.disabled = false;
+        deleteRecipeButton.textContent = "Padam produk";
+    }
+}
+
+
 /* Ingredient functions */
 
 function showIngredientError(message) {
@@ -134,6 +213,92 @@ function showIngredientError(message) {
 function hideIngredientError() {
     ingredientFormError.textContent = "";
     ingredientFormError.hidden = true;
+}
+
+
+function resetIngredientForm() {
+    ingredientForm.reset();
+
+    delete ingredientForm.dataset.editingIngredientId;
+
+    ingredientSubmitButton.textContent = "Simpan bahan";
+    cancelIngredientEditButton.hidden = true;
+
+    hideIngredientError();
+}
+
+
+async function editIngredient(event) {
+    const editButton = event.currentTarget;
+    const ingredientId = editButton.dataset.ingredientId;
+
+    editButton.disabled = true;
+    editButton.textContent = "Loading...";
+
+    try {
+        const response = await fetch(
+            `/ingredients/${ingredientId}`
+        );
+
+        const ingredient = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                readApiError(
+                    ingredient,
+                    "Maklumat bahan tidak dapat dibuka."
+                )
+            );
+        }
+
+        ingredientNameInput.value = ingredient.name;
+
+        ingredientPriceInput.value = (
+            ingredient.purchase_price
+        );
+
+        ingredientSizeInput.value = (
+            ingredient.purchase_size
+        );
+
+        ingredientPurchaseUnitInput.value = (
+            ingredient.purchase_unit
+        );
+
+        ingredientQuantityUsedInput.value = (
+            ingredient.quantity_used
+        );
+
+        ingredientUsedUnitInput.value = (
+            ingredient.used_unit
+        );
+
+        ingredientForm.dataset.editingIngredientId = (
+            ingredient.id
+        );
+
+        ingredientSubmitButton.textContent = (
+            "Simpan perubahan"
+        );
+
+        cancelIngredientEditButton.hidden = false;
+        ingredientFormSection.open = true;
+
+        ingredientFormSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    } catch (error) {
+        window.alert(
+            error.message
+            || "Cik Kira tidak dapat membuka bahan."
+        );
+
+    } finally {
+        editButton.disabled = false;
+        editButton.textContent = "Edit";
+    }
 }
 
 
@@ -152,6 +317,20 @@ async function addIngredient(event) {
     }
 
     const recipeId = ingredientForm.dataset.recipeId;
+
+    const ingredientId = (
+        ingredientForm.dataset.editingIngredientId
+    );
+
+    const isEditing = Boolean(ingredientId);
+
+    const endpoint = isEditing
+        ? `/ingredients/${ingredientId}`
+        : `/recipes/${recipeId}/ingredients`;
+
+    const requestMethod = isEditing
+        ? "PUT"
+        : "POST";
 
     const submitButton = ingredientForm.querySelector(
         'button[type="submit"]'
@@ -181,9 +360,9 @@ async function addIngredient(event) {
 
     try {
         const response = await fetch(
-            `/recipes/${recipeId}/ingredients`,
+            endpoint,
             {
-                method: "POST",
+                method: requestMethod,
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -272,6 +451,80 @@ function hidePackagingError() {
     packagingFormError.hidden = true;
 }
 
+function resetPackagingForm() {
+    packagingForm.reset();
+
+    delete packagingForm.dataset.editingPackagingId;
+
+    packagingSubmitButton.textContent = "Simpan packaging";
+    cancelPackagingEditButton.hidden = true;
+
+    hidePackagingError();
+}
+
+
+async function editPackaging(event) {
+    const editButton = event.currentTarget;
+    const packagingId = editButton.dataset.packagingId;
+
+    editButton.disabled = true;
+    editButton.textContent = "Loading...";
+
+    try {
+        const response = await fetch(
+            `/packaging-items/${packagingId}`
+        );
+
+        const packaging = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                readApiError(
+                    packaging,
+                    "Packaging information could not be opened."
+                )
+            );
+        }
+
+        packagingNameInput.value = packaging.name;
+        packagingPriceInput.value = packaging.purchase_price;
+        packagingSizeInput.value = packaging.purchase_size;
+        packagingPurchaseUnitInput.value = (
+            packaging.purchase_unit
+        );
+        packagingQuantityUsedInput.value = (
+            packaging.quantity_used
+        );
+        packagingUsedUnitInput.value = packaging.used_unit;
+
+        packagingForm.dataset.editingPackagingId = (
+            packaging.id
+        );
+
+        packagingSubmitButton.textContent = (
+            "Save changes"
+        );
+
+        cancelPackagingEditButton.hidden = false;
+        packagingFormSection.open = true;
+
+        packagingFormSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    } catch (error) {
+        window.alert(
+            error.message
+            || "Cik Kira could not open the packaging."
+        );
+
+    } finally {
+        editButton.disabled = false;
+        editButton.textContent = "Edit";
+    }
+}
+
 
 async function addPackaging(event) {
     event.preventDefault();
@@ -288,6 +541,18 @@ async function addPackaging(event) {
     }
 
     const recipeId = packagingForm.dataset.recipeId;
+
+    const packagingId = (
+    packagingForm.dataset.editingPackagingId
+    );
+
+    const isEditing = Boolean(packagingId);
+
+    const endpoint = isEditing
+        ? `/packaging-items/${packagingId}`
+        : `/recipes/${recipeId}/packaging-items`;
+
+    const requestMethod = isEditing ? "PUT" : "POST";
 
     const submitButton = packagingForm.querySelector(
         'button[type="submit"]'
@@ -317,9 +582,9 @@ async function addPackaging(event) {
 
     try {
         const response = await fetch(
-            `/recipes/${recipeId}/packaging-items`,
+            endpoint,
             {
-                method: "POST",
+                method: requestMethod,
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -416,6 +681,20 @@ detailNumberInputs.forEach((input) => {
 
 /* Event listeners */
 
+deleteRecipeButton.addEventListener(
+    "click",
+    deleteRecipe
+);
+
+/* Ingredient buttons */
+
+editIngredientButtons.forEach((button) => {
+    button.addEventListener(
+        "click",
+        editIngredient
+    );
+});
+
 deleteIngredientButtons.forEach((button) => {
     button.addEventListener(
         "click",
@@ -423,12 +702,35 @@ deleteIngredientButtons.forEach((button) => {
     );
 });
 
+cancelIngredientEditButton.addEventListener(
+    "click",
+    resetIngredientForm
+);
+
+
+/* Packaging buttons */
+
+editPackagingButtons.forEach((button) => {
+    button.addEventListener(
+        "click",
+        editPackaging
+    );
+});
+
+cancelPackagingEditButton.addEventListener(
+    "click",
+    resetPackagingForm
+);
+
 deletePackagingButtons.forEach((button) => {
     button.addEventListener(
         "click",
         deletePackaging
     );
 });
+
+
+/* Forms */
 
 ingredientForm.addEventListener(
     "submit",

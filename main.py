@@ -534,6 +534,39 @@ def quick_calculation_page(
     )
 
 
+# Break-even calculation web page
+@app.get(
+    "/kira-target",
+    response_class=HTMLResponse
+)
+def break_even_calculation_page(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    recipes = crud.get_recipes(db)
+    calculated_products = []
+
+    for recipe in recipes:
+        try:
+            result = calculate_saved_recipe(recipe)
+
+        except ValueError:
+            continue
+
+        calculated_products.append({
+            "recipe": recipe,
+            "result": result
+        })
+
+    return templates.TemplateResponse(
+        request=request,
+        name="calculators/break_even.html",
+        context={
+            "calculated_products": calculated_products
+        }
+    )
+
+
 # Home page
 @app.get(
     "/",

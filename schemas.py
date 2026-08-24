@@ -97,6 +97,8 @@ class RecipeResponse(RecipeBase):
 class RecipeCalculationResponse(BaseModel):
     recipe_id: int
     recipe_name: str
+    ingredient_costs: dict[int, float]
+    packaging_costs: dict[int, float]
     total_ingredient_cost: float
     total_packaging_cost: float
     labor_cost: float

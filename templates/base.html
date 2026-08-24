@@ -32,7 +32,7 @@
 
     <link
         rel="stylesheet"
-        href="{{ url_for('static', path='/css/style.css') }}"
+        href="{{ url_for('static', path='/css/style.css') }}?v=4"
     >
 </head>
 
@@ -40,8 +40,24 @@
     <header class="site-header">
         <nav class="navbar">
             <a class="brand" href="/">
-                <span class="brand-icon">&#127856;</span>
-                <span>DapurKira</span>
+                <span class="brand-icon" aria-hidden="true">
+                    <span class="logo-calculator">
+                        <span class="logo-screen">RM</span>
+
+                        <span class="logo-keys">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </span>
+                </span>
+
+                <span class="brand-name">
+                    Dapur<span>Kira</span>
+                </span>
             </a>
 
             <div class="nav-links">

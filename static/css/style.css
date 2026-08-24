@@ -130,16 +130,158 @@ a,
     letter-spacing: -0.03em;
 }
 
+.brand-name {
+    color: var(--brown);
+}
+
+.brand-name span {
+    color: #c94f7d;
+}
+
 .brand-icon {
     width: 42px;
     height: 42px;
 
+    position: relative;
     display: grid;
     place-items: center;
 
-    background: var(--primary-light);
+    background: linear-gradient(
+        135deg,
+        #ffb9d4 0%,
+        #e5c7ff 35%,
+        #bdebef 68%,
+        #ffe0aa 100%
+    );
+
+    border: 1px solid rgba(255, 255, 255, 0.9);
     border-radius: 14px;
-    font-size: 1.25rem;
+
+    box-shadow:
+        0 0 0 1px rgba(221, 116, 159, 0.2),
+        0 5px 14px rgba(210, 87, 139, 0.25),
+        inset 0 1px 4px rgba(255, 255, 255, 0.9);
+
+    transition:
+        transform 180ms ease,
+        box-shadow 180ms ease;
+}
+
+/* Large sparkle */
+
+.brand-icon::before {
+    content: "";
+
+    width: 8px;
+    height: 8px;
+
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    z-index: 3;
+
+    background: #ffffff;
+
+    clip-path: polygon(
+        50% 0%,
+        62% 38%,
+        100% 50%,
+        62% 62%,
+        50% 100%,
+        38% 62%,
+        0% 50%,
+        38% 38%
+    );
+
+    filter: drop-shadow(0 0 3px #ffffff);
+}
+
+/* Small sparkle */
+
+.brand-icon::after {
+    content: "";
+
+    width: 4px;
+    height: 4px;
+
+    position: absolute;
+    bottom: 6px;
+    left: 5px;
+    z-index: 3;
+
+    background: #fff7ce;
+    transform: rotate(45deg);
+
+    box-shadow: 0 0 5px rgba(255, 247, 206, 0.9);
+}
+
+.brand:hover .brand-icon {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 0 0 1px rgba(221, 116, 159, 0.25),
+        0 7px 18px rgba(210, 87, 139, 0.34),
+        0 0 12px rgba(197, 224, 255, 0.7),
+        inset 0 1px 4px rgba(255, 255, 255, 0.95);
+}
+
+/* Calculator */
+
+.logo-calculator {
+    width: 22px;
+    height: 27px;
+    padding: 4px;
+
+    position: relative;
+    z-index: 2;
+
+    background: linear-gradient(
+        160deg,
+        #f46f9f,
+        #d7558b
+    );
+
+    border: 2px solid #684052;
+    border-radius: 6px;
+
+    box-shadow:
+        2px 2px 0 rgba(104, 64, 82, 0.25),
+        inset 1px 1px 2px rgba(255, 255, 255, 0.45);
+}
+
+.logo-screen {
+    height: 7px;
+    padding-right: 2px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #684052;
+    border-radius: 2px;
+
+    color: #684052;
+    font-size: 5px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.logo-keys {
+    margin-top: 3px;
+
+    display: grid;
+    grid-template-columns: repeat(3, 3px);
+    justify-content: center;
+    gap: 2px;
+}
+
+.logo-keys span {
+    width: 3px;
+    height: 3px;
+
+    background: #fff8ee;
+    border-radius: 1px;
 }
 
 .nav-links {
@@ -2477,6 +2619,35 @@ select.form-input {
     font-size: 0.75rem;
 }
 
+.record-card .record-actual-cost {
+    width: fit-content;
+    margin-top: 7px;
+    padding: 4px 9px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    border: 1px solid;
+    border-radius: 999px;
+
+    font-size: 0.65rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.record-card .record-actual-cost strong {
+    font-size: 0.72rem;
+    font-weight: 900;
+}
+
+.record-card .ingredient-actual-cost,
+.record-card .packaging-actual-cost {
+    background: #eadff6;
+    border-color: #c9b4e5;
+    color: #65477e;
+}
+
 .delete-record-button {
     flex-shrink: 0;
     padding: 7px 11px;
@@ -2490,6 +2661,42 @@ select.form-input {
     font-family: inherit;
     font-size: 0.72rem;
     font-weight: 900;
+}
+
+.record-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.edit-record-button {
+    padding: 7px 11px;
+
+    background: var(--lavender-soft);
+    border: 1px solid var(--lavender);
+    border-radius: 999px;
+
+    color: var(--lavender-dark);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 900;
+}
+
+.edit-record-button:hover {
+    background: var(--lavender);
+    color: white;
+}
+
+.record-form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.record-form-actions .button {
+    justify-content: center;
 }
 
 .delete-record-button:hover {
@@ -2920,8 +3127,17 @@ select.form-input {
         align-items: flex-start;
     }
 
-    .delete-record-button {
-        align-self: flex-end;
+    .record-actions {
+    align-self: flex-end;
+    }
+
+    .record-form-actions {
+        align-items: stretch;
+        flex-direction: column-reverse;
+    }
+
+    .record-form-actions .button {
+        width: 100%;
     }
 
     .detail-notice {

@@ -14,8 +14,8 @@ from calculations import (
 
 
 def calculate_saved_recipe(recipe:models.Recipe): 
-    total_ingredient_cost = sum(
-        calculate_ingredient_cost(
+    ingredient_costs = {
+        ingredient.id: calculate_ingredient_cost(
             ingredient.purchase_price,
             ingredient.purchase_size,
             ingredient.purchase_unit,
@@ -23,10 +23,14 @@ def calculate_saved_recipe(recipe:models.Recipe):
             ingredient.used_unit
         )
         for ingredient in recipe.ingredients
+    }
+
+    total_ingredient_cost = sum(
+        ingredient_costs.values()
     )
 
-    total_packaging_cost = sum(
-        calculate_packaging_cost(
+    packaging_costs = {
+        packaging.id: calculate_packaging_cost(
             packaging.purchase_price,
             packaging.purchase_size,
             packaging.purchase_unit,
@@ -34,6 +38,10 @@ def calculate_saved_recipe(recipe:models.Recipe):
             packaging.used_unit
         )
         for packaging in recipe.packaging_items
+    }
+
+    total_packaging_cost = sum(
+        packaging_costs.values()
     )
 
     labor_cost = calculate_labor_cost(
@@ -86,6 +94,16 @@ def calculate_saved_recipe(recipe:models.Recipe):
     return {
         "recipe_id": recipe.id,
         "recipe_name": recipe.name,
+        "ingredient_costs": {
+            ingredient_id: round_money(cost)
+            for ingredient_id, cost
+            in ingredient_costs.items()
+        },
+        "packaging_costs": {
+            packaging_id: round_money(cost)
+            for packaging_id, cost
+            in packaging_costs.items()
+        },
         "total_ingredient_cost": round_money(
             total_ingredient_cost
         ),
