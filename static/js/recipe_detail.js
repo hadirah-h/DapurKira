@@ -481,7 +481,7 @@ async function editPackaging(event) {
             throw new Error(
                 readApiError(
                     packaging,
-                    "Packaging information could not be opened."
+                    "Maklumat packaging tidak dapat dibuka."
                 )
             );
         }

@@ -257,6 +257,37 @@ async function calculateBreakEven(event) {
         return;
     }
 
+    const utilityBill = readOptionalNumber(
+    utilityBillInput
+    );
+
+    const utilityPercentage = readOptionalNumber(
+        businessUtilityPercentageInput
+    );
+
+    if (utilityBill > 0 && utilityPercentage === 0) {
+        showBreakEvenError(
+            "Masukkan anggaran peratus kegunaan utiliti untuk bisnes."
+        );
+
+        businessUtilityPercentageInput
+            .closest("details")
+            .open = true;
+
+        businessUtilityPercentageInput.focus();
+        return;
+    }
+
+    if (utilityPercentage > 0 && utilityBill === 0) {
+        showBreakEvenError(
+            "Masukkan jumlah bil utiliti rumah."
+        );
+
+        utilityBillInput.closest("details").open = true;
+        utilityBillInput.focus();
+        return;
+    }
+
     const targetIncomeValue = (
         targetMonthlyIncomeInput.value.trim()
     );
@@ -269,13 +300,9 @@ async function calculateBreakEven(event) {
             otherFixedCostInput
         ),
 
-        total_utility_bill: readOptionalNumber(
-            utilityBillInput
-        ),
+        total_utility_bill: utilityBill,
 
-        business_utility_percentage: readOptionalNumber(
-            businessUtilityPercentageInput
-        ),
+        business_utility_percentage: utilityPercentage,
 
         equipment_cost: readOptionalNumber(
             equipmentCostInput

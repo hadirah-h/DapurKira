@@ -6,9 +6,9 @@ Target Jual | DapurKira
 
 {% block content %}
 
-<section class="calculator-page break-even-page">
+<section class="target-planner-page">
 
-    <header class="calculator-header">
+    <header class="target-planner-header">
         <a class="back-link" href="/">
             <span>&larr;</span>
             Kembali ke dashboard
@@ -21,75 +21,72 @@ Target Jual | DapurKira
         <h1>Berapa unit perlu dijual?</h1>
 
         <p>
-            Cik Kira akan bantu tentukan sasaran jualan untuk
-            cover kos tetap dan capai target pendapatan anda.
+            Pilih produk, tambah kos bulanan yang berkaitan,
+            kemudian Cik Kira akan susun target jual anda.
         </p>
     </header>
 
-    <div class="calculator-layout">
+    <form id="break-even-form" class="target-planner-form">
 
-        <div class="calculator-form-card">
+        <!-- Step 1: Product -->
 
-            <form id="break-even-form">
+        <section class="planner-section planner-product-section">
 
-                <!-- Required information -->
+            <header class="planner-section-heading">
+                <span class="planner-step">01</span>
 
-                <div class="form-section-heading">
-                    <span>01</span>
+                <div>
+                    <h2>Pilih produk</h2>
 
-                    <div>
-                        <h2>Maklumat produk</h2>
-                        <p>Kita perlukan dua nilai utama dahulu.</p>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="saved-product">
-                        Gunakan produk tersimpan
-                    </label>
-
-                    <p class="field-help">
-                        Pilih produk daripada Mode 2, atau masukkan kos sendiri.
+                    <p>
+                        Gunakan pengiraan yang sudah disimpan
+                        atau masukkan nilainya sendiri.
                     </p>
+                </div>
+            </header>
 
-                    <select id="saved-product">
-                        <option value="">
-                            Masukkan kos sendiri
+            <div class="form-group saved-product-field">
+                <label for="saved-product">
+                    Produk tersimpan
+                </label>
+
+                <select id="saved-product">
+                    <option value="">
+                        Masukkan kos sendiri
+                    </option>
+
+                    {% for item in calculated_products %}
+                        <option
+                            value="{{ item.recipe.id }}"
+                            data-cost-per-item="{{
+                                item.result.cost_per_item
+                            }}"
+                            data-selling-price="{{
+                                item.result.selling_price
+                            }}"
+                        >
+                            {{ item.recipe.name }}
                         </option>
+                    {% endfor %}
+                </select>
 
-                        {% for item in calculated_products %}
-                            <option
-                                value="{{ item.recipe.id }}"
-                                data-cost-per-item="{{
-                                    item.result.cost_per_item
-                                }}"
-                                data-selling-price="{{
-                                    item.result.selling_price
-                                }}"
-                            >
-                                {{ item.recipe.name }}
-                            </option>
-                        {% endfor %}
-                    </select>
+                <p
+                    id="saved-product-note"
+                    class="field-help saved-product-note"
+                    hidden
+                >
+                    Kos seunit diambil daripada pengiraan produk.
+                    Harga jual masih boleh diubah untuk mencuba
+                    target yang berbeza.
+                </p>
+            </div>
 
-                    <p
-                        id="saved-product-note"
-                        class="field-help saved-product-note"
-                        hidden
-                    >
-                        Kos seunit diambil daripada pengiraan produk.
-                        Anda masih boleh mencuba harga jual yang berbeza.
-                    </p>
-                </div>
+            <div class="planner-product-values">
 
                 <div class="form-group">
                     <label for="break-even-cost">
                         Kos seunit
                     </label>
-
-                    <p class="field-help">
-                        Kos sebenar untuk menghasilkan satu unit.
-                    </p>
 
                     <div class="input-with-prefix">
                         <span>RM</span>
@@ -111,10 +108,6 @@ Target Jual | DapurKira
                         Harga jual seunit
                     </label>
 
-                    <p class="field-help">
-                        Harga yang pelanggan bayar untuk satu unit.
-                    </p>
-
                     <div class="input-with-prefix">
                         <span>RM</span>
 
@@ -130,64 +123,92 @@ Target Jual | DapurKira
                     </div>
                 </div>
 
-                <!-- Fixed costs -->
+            </div>
 
-                <div class="form-section-heading">
-                    <span>02</span>
+        </section>
 
-                    <div>
-                        <h2>Kos tetap bulanan</h2>
+        <!-- Step 2: Monthly costs -->
 
-                        <p>
-                            Masukkan kos yang perlu dibayar walaupun
-                            jualan berubah.
-                        </p>
-                    </div>
-                </div>
+        <section class="planner-section">
 
-                <div class="form-group">
-                    <label for="other-fixed-cost">
-                        Kos tetap lain
-                    </label>
+            <header class="planner-section-heading">
+                <span class="planner-step">02</span>
 
-                    <p class="field-help">
-                        Contoh: sewa, internet atau langganan bisnes.
-                        Boleh dibiarkan kosong.
+                <div>
+                    <h2>Pilih kos bulanan yang berkaitan</h2>
+
+                    <p>
+                        Buka dan isi bahagian yang anda perlukan sahaja.
+                        Semua bahagian ini adalah pilihan.
                     </p>
-
-                    <div class="input-with-prefix">
-                        <span>RM</span>
-
-                        <input
-                            id="other-fixed-cost"
-                            type="number"
-                            min="0"
-                            step="0.01"
-                            inputmode="decimal"
-                            placeholder="0.00"
-                        >
-                    </div>
                 </div>
+            </header>
 
-                <!-- Optional utility calculation -->
+            <div class="planner-cost-grid">
 
-                <details class="optional-price optional-cost-section">
+                <!-- Other fixed costs -->
+
+                <details class="planner-cost-card">
 
                     <summary>
-                        Anggarkan kos utiliti
-                        <span>Pilihan tambahan</span>
+                        <span class="planner-cost-icon">
+                            &#128203;
+                        </span>
+
+                        <span>
+                            <strong>Kos tetap lain</strong>
+                            <small>Sewa, internet atau langganan</small>
+                        </span>
+
+                        <span class="planner-expand-icon">+</span>
                     </summary>
 
-                    <div class="optional-fields">
+                    <div class="planner-cost-fields">
+                        <div class="form-group">
+                            <label for="other-fixed-cost">
+                                Jumlah sebulan
+                            </label>
+
+                            <div class="input-with-prefix">
+                                <span>RM</span>
+
+                                <input
+                                    id="other-fixed-cost"
+                                    type="number"
+                                    min="0"
+                                    step="0.01"
+                                    inputmode="decimal"
+                                    placeholder="0.00"
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                </details>
+
+                <!-- Utilities -->
+
+                <details class="planner-cost-card">
+
+                    <summary>
+                        <span class="planner-cost-icon">
+                            &#9889;
+                        </span>
+
+                        <span>
+                            <strong>Utiliti rumah</strong>
+                            <small>Anggaran bahagian untuk bisnes</small>
+                        </span>
+
+                        <span class="planner-expand-icon">+</span>
+                    </summary>
+
+                    <div class="planner-cost-fields">
 
                         <div class="form-group">
                             <label for="utility-bill">
-                                Jumlah bil utiliti rumah
+                                Jumlah bil utiliti
                             </label>
-
-                            <p class="field-help">
-                                Contoh: jumlah bil elektrik dan gas.
-                            </p>
 
                             <div class="input-with-prefix">
                                 <span>RM</span>
@@ -205,13 +226,8 @@ Target Jual | DapurKira
 
                         <div class="form-group">
                             <label for="business-utility-percentage">
-                                Anggaran kegunaan untuk bisnes
+                                Anggaran kegunaan bisnes
                             </label>
-
-                            <p class="field-help">
-                                Tidak perlu terlalu tepat. Gunakan
-                                anggaran yang munasabah.
-                            </p>
 
                             <div class="input-with-suffix">
                                 <input
@@ -226,31 +242,40 @@ Target Jual | DapurKira
 
                                 <span>%</span>
                             </div>
+
+                            <p class="field-help">
+                                Tidak perlu terlalu tepat. Gunakan
+                                anggaran yang munasabah.
+                            </p>
                         </div>
 
                     </div>
 
                 </details>
 
-                <!-- Optional equipment -->
+                <!-- Equipment -->
 
-                <details class="optional-price optional-cost-section">
+                <details class="planner-cost-card">
 
                     <summary>
-                        Saya membeli peralatan
-                        <span>Pilihan tambahan</span>
+                        <span class="planner-cost-icon">
+                            &#9881;
+                        </span>
+
+                        <span>
+                            <strong>Peralatan</strong>
+                            <small>Oven, mixer atau freezer</small>
+                        </span>
+
+                        <span class="planner-expand-icon">+</span>
                     </summary>
 
-                    <div class="optional-fields">
+                    <div class="planner-cost-fields">
 
                         <div class="form-group">
                             <label for="equipment-cost">
                                 Harga peralatan
                             </label>
-
-                            <p class="field-help">
-                                Contoh: oven, mixer atau freezer.
-                            </p>
 
                             <div class="input-with-prefix">
                                 <span>RM</span>
@@ -268,12 +293,8 @@ Target Jual | DapurKira
 
                         <div class="form-group">
                             <label for="recovery-months">
-                                Tempoh untuk cover harga peralatan
+                                Tempoh untuk cover harga
                             </label>
-
-                            <p class="field-help">
-                                Contoh: RM1,200 dalam tempoh 12 bulan.
-                            </p>
 
                             <div class="input-with-suffix">
                                 <input
@@ -293,173 +314,213 @@ Target Jual | DapurKira
 
                 </details>
 
-                <!-- Optional income target -->
-
-                <details class="optional-price optional-cost-section">
-
-                    <summary>
-                        Saya ada target pendapatan
-                        <span>Pilihan tambahan</span>
-                    </summary>
-
-                    <div class="form-group optional-fields">
-                        <label for="target-monthly-income">
-                            Target pendapatan bulanan
-                        </label>
-
-                        <p class="field-help">
-                            Sasaran pendapatan selepas mengambil kira
-                            kos tetap.
-                        </p>
-
-                        <div class="input-with-prefix">
-                            <span>RM</span>
-
-                            <input
-                                id="target-monthly-income"
-                                type="number"
-                                min="0"
-                                step="0.01"
-                                inputmode="decimal"
-                                placeholder="Contoh: 1500.00"
-                            >
-                        </div>
-                    </div>
-
-                </details>
-
-                <div
-                    id="break-even-error"
-                    class="form-error"
-                    role="alert"
-                    hidden
-                ></div>
-
-                <button
-                    class="button primary calculate-button"
-                    type="submit"
-                >
-                    Kira target jual
-                    <span>&rarr;</span>
-                </button>
-
-            </form>
-
-        </div>
-
-        <!-- Results -->
-
-        <aside
-            id="break-even-result-card"
-            class="quick-result-card break-even-result-card"
-            hidden
-        >
-
-            <div class="result-heading">
-                <span>Ringkasan Cik Kira</span>
-                <h2>Target minimum anda</h2>
             </div>
 
-            <div class="main-result">
-                <span>Perlu dijual setiap bulan</span>
+        </section>
+
+        <!-- Step 3: Income target -->
+
+        <section class="planner-section planner-goal-section">
+
+            <header class="planner-section-heading">
+                <span class="planner-step">03</span>
+
+                <div>
+                    <h2>Tambah target pendapatan</h2>
+
+                    <p>
+                        Pilihan tambahan jika anda mahu sasaran
+                        melebihi sekadar cover kos.
+                    </p>
+                </div>
+            </header>
+
+            <div class="planner-goal-content">
+
+                <div>
+                    <strong>Ada target bulanan?</strong>
+
+                    <p>
+                        Biarkan kosong jika anda hanya mahu mengira
+                        target minimum untuk cover kos tetap.
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label for="target-monthly-income">
+                        Target pendapatan
+                    </label>
+
+                    <div class="input-with-prefix">
+                        <span>RM</span>
+
+                        <input
+                            id="target-monthly-income"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            inputmode="decimal"
+                            placeholder="Contoh: 1500.00"
+                        >
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <div
+            id="break-even-error"
+            class="form-error"
+            role="alert"
+            hidden
+        ></div>
+
+        <div class="planner-submit-area">
+            <p>
+                Cik Kira akan gunakan semua maklumat di atas
+                untuk menyediakan target anda.
+            </p>
+
+            <button
+                class="button primary calculate-button"
+                type="submit"
+            >
+                Kira target jual
+                <span>&rarr;</span>
+            </button>
+        </div>
+
+    </form>
+
+    <!-- Results -->
+
+    <section
+        id="break-even-result-card"
+        class="planner-result-card"
+        hidden
+    >
+
+        <header class="planner-result-heading">
+            <div>
+                <span class="eyebrow">Ringkasan Cik Kira</span>
+                <h2>Target jual anda</h2>
+            </div>
+
+            <span class="planner-result-sparkle" aria-hidden="true">
+                &#10022;
+            </span>
+        </header>
+
+        <div class="planner-main-target">
+            <span>Target minimum sebulan</span>
+
+            <strong>
+                <span id="result-break-even-monthly">0</span>
+                <small>unit</small>
+            </strong>
+
+            <p>
+                Anggaran minimum untuk cover semua kos bulanan.
+            </p>
+        </div>
+
+        <div class="planner-target-grid">
+
+            <div class="planner-target-item">
+                <span>Seminggu</span>
 
                 <strong>
-                    <span id="result-break-even-monthly">0</span>
+                    <span id="result-break-even-weekly">0</span>
                     unit
                 </strong>
             </div>
 
-            <div class="result-grid">
+            <div class="planner-target-item">
+                <span>Sehari</span>
 
-                <div class="result-item">
-                    <span>Anggaran mingguan</span>
-
-                    <strong>
-                        <span id="result-break-even-weekly">0</span>
-                        unit
-                    </strong>
-                </div>
-
-                <div class="result-item">
-                    <span>Anggaran harian</span>
-
-                    <strong>
-                        <span id="result-break-even-daily">0</span>
-                        unit
-                    </strong>
-                </div>
-
-                <div class="result-item profit-result">
-                    <span>Untung seunit</span>
-
-                    <strong>
-                        RM
-                        <span id="result-break-even-profit">0.00</span>
-                    </strong>
-                </div>
-
-                <div class="result-item">
-                    <span>Jumlah kos tetap bulanan</span>
-
-                    <strong>
-                        RM
-                        <span id="result-monthly-fixed-cost">0.00</span>
-                    </strong>
-                </div>
-
+                <strong>
+                    <span id="result-break-even-daily">0</span>
+                    unit
+                </strong>
             </div>
 
-            <div class="break-even-cost-summary">
+            <div class="planner-target-item profit-target-item">
+                <span>Untung seunit</span>
 
-                <p>
-                    Anggaran utiliti bisnes
+                <strong>
+                    RM<span id="result-break-even-profit">0.00</span>
+                </strong>
+            </div>
+
+        </div>
+
+        <div class="planner-result-breakdown">
+
+            <h3>Pecahan kos bulanan</h3>
+
+            <div class="planner-breakdown-grid">
+
+                <div>
+                    <span>Jumlah kos tetap</span>
+
+                    <strong>
+                        RM<span id="result-monthly-fixed-cost">0.00</span>
+                    </strong>
+                </div>
+
+                <div>
+                    <span>Anggaran utiliti bisnes</span>
+
                     <strong>
                         RM<span id="result-utility-cost">0.00</span>
                     </strong>
-                </p>
+                </div>
 
-                <p>
-                    Peralatan sebulan
+                <div>
+                    <span>Peralatan sebulan</span>
+
                     <strong>
                         RM<span id="result-equipment-cost">0.00</span>
                     </strong>
-                </p>
+                </div>
 
             </div>
 
-            <div
-                id="target-income-result"
-                class="target-income-result"
-                hidden
-            >
-                <span>Untuk capai target pendapatan</span>
+        </div>
 
-                <strong>
-                    <span id="result-target-monthly">0</span>
-                    unit sebulan
-                </strong>
+        <div
+            id="target-income-result"
+            class="planner-income-result"
+            hidden
+        >
+            <span>Untuk capai target pendapatan</span>
 
-                <p>
-                    <span id="result-target-weekly">0</span>
-                    unit seminggu &middot;
-                    <span id="result-target-daily">0</span>
-                    unit sehari
-                </p>
-            </div>
+            <strong>
+                <span id="result-target-monthly">0</span>
+                unit sebulan
+            </strong>
 
-            <p class="result-note">
-                Angka ini ialah sasaran minimum berdasarkan
-                maklumat yang anda masukkan.
+            <p>
+                <span id="result-target-weekly">0</span>
+                unit seminggu &middot;
+                <span id="result-target-daily">0</span>
+                unit sehari
             </p>
+        </div>
 
-        </aside>
+        <p class="result-note">
+            Target ini ialah panduan berdasarkan maklumat yang
+            anda masukkan. Sesuaikan dengan kemampuan pengeluaran
+            dan keadaan bisnes anda.
+        </p>
 
-    </div>
+    </section>
 
 </section>
 
 <script
-    src="{{ url_for('static', path='/js/break_even.js') }}?v=1"
+    src="{{ url_for('static', path='/js/break_even.js') }}?v=3"
     defer
 ></script>
 

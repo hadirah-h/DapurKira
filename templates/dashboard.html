@@ -5,6 +5,19 @@
 {% endblock %}
 
 {% block content %}
+
+{% set category_icons = {
+    "Kuih Tradisional": "🥥",
+    "Kek & Dessert": "🍰",
+    "Roti & Pastri": "🥐",
+    "Makanan Frozen": "❄️",
+    "Hidangan Utama": "🍛",
+    "Snek & Kudapan": "🍿",
+    "Minuman": "🥤",
+    "Sambal, Sos & Pes": "🌶️",
+    "Lain-lain": "🍴"
+} %}
+
 <section class="hero">
     <div
         class="floating-sparkles"
@@ -323,8 +336,14 @@
                 >
                     <div class="product-heading">
                         <div class="product-title">
-                            <span class="product-icon">
-                                &#127851;
+                            <span
+                                class="product-icon"
+                                aria-hidden="true"
+                            >
+                                {{ category_icons.get(
+                                    item.recipe.category,
+                                    "🍴"
+                                ) }}
                             </span>
 
                             <div>
