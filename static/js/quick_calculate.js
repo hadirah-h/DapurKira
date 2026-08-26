@@ -38,6 +38,14 @@ const resultCard = document.querySelector(
     "#quick-result-card"
 );
 
+const batchCostResult = document.querySelector(
+    "#result-batch-cost"
+);
+
+const yieldQtyResult = document.querySelector(
+    "#result-yield-qty"
+);
+
 const sellingPriceResult = document.querySelector(
     "#result-selling-price"
 );
@@ -109,6 +117,14 @@ function hideError() {
 
 
 function displayResults(result) {
+    batchCostResult.textContent = Number(
+        result.total_batch_cost
+    ).toFixed(2);
+
+    yieldQtyResult.textContent = Number(
+        yieldInput.value
+    );
+
     sellingPriceResult.textContent = (
         result.selling_price.toFixed(2)
     );

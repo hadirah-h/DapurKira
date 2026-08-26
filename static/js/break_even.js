@@ -77,6 +77,14 @@ const resultMonthlyFixedCost = document.querySelector(
     "#result-monthly-fixed-cost"
 );
 
+const resultOtherFixedCost = document.querySelector(
+    "#result-other-fixed-cost"
+);
+
+const resultBreakEvenFormula = document.querySelector(
+    "#result-break-even-formula"
+);
+
 const resultUtilityCost = document.querySelector(
     "#result-utility-cost"
 );
@@ -95,6 +103,10 @@ const resultTargetWeekly = document.querySelector(
 
 const resultTargetDaily = document.querySelector(
     "#result-target-daily"
+);
+
+const resultTargetIncomeAmount = document.querySelector(
+    "#result-target-income-amount"
 );
 
 
@@ -177,6 +189,18 @@ function updateSavedProduct() {
 /* Display calculation results */
 
 function displayBreakEvenResult(result) {
+    const monthlyFixedCost = Number(
+        result.total_monthly_fixed_cost
+    );
+
+    const profitPerItem = Number(
+        result.profit_per_item
+    );
+
+    const exactBreakEvenUnits = (
+        monthlyFixedCost / profitPerItem
+    );
+
     resultBreakEvenMonthly.textContent = (
         result.break_even_units_monthly
     );
@@ -189,13 +213,19 @@ function displayBreakEvenResult(result) {
         result.break_even_units_daily
     );
 
-    resultBreakEvenProfit.textContent = Number(
-        result.profit_per_item
-    ).toFixed(2);
+    resultBreakEvenProfit.textContent = (
+        profitPerItem.toFixed(2)
+    );
 
-    resultMonthlyFixedCost.textContent = Number(
-        result.total_monthly_fixed_cost
-    ).toFixed(2);
+    resultMonthlyFixedCost.textContent = (
+        monthlyFixedCost.toFixed(2)
+    );
+
+    resultOtherFixedCost.textContent = (
+        readOptionalNumber(
+            otherFixedCostInput
+        ).toFixed(2)
+    );
 
     resultUtilityCost.textContent = Number(
         result.utility_business_cost
@@ -205,6 +235,15 @@ function displayBreakEvenResult(result) {
         result.monthly_equipment_cost
     ).toFixed(2);
 
+    resultBreakEvenFormula.textContent = (
+        `RM${monthlyFixedCost.toFixed(2)} ÷ `
+        + `RM${profitPerItem.toFixed(2)} = `
+        + `${exactBreakEvenUnits.toFixed(2)} unit. `
+        + `Cik Kira bundarkan ke atas kepada `
+        + `${result.break_even_units_monthly} unit supaya `
+        + `semua kos overhead bulanan dapat ditampung.`
+    );
+
     const hasIncomeTarget = (
         result.target_income_units_monthly !== null
     );
@@ -212,6 +251,10 @@ function displayBreakEvenResult(result) {
     targetIncomeResult.hidden = !hasIncomeTarget;
 
     if (hasIncomeTarget) {
+        resultTargetIncomeAmount.textContent = Number(
+            targetMonthlyIncomeInput.value
+        ).toFixed(2);
+
         resultTargetMonthly.textContent = (
             result.target_income_units_monthly
         );

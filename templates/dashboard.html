@@ -358,7 +358,8 @@
                         </div>
 
                         <span class="yield-badge">
-                            {{ item.recipe.yield_qty }} unit
+                            1 batch &rarr;
+                            {{ item.recipe.yield_qty }} unit jualan
                         </span>
                     </div>
 
@@ -371,6 +372,16 @@
                                     RM{{ "%.2f" | format(
                                         item.result.cost_per_item
                                     ) }}
+                                </strong>
+                            </div>
+
+                            <div class="price-item">
+                                <span>Markup</span>
+
+                                <strong>
+                                    {{ "%.0f" | format(
+                                        item.recipe.target_markup
+                                    ) }}%
                                 </strong>
                             </div>
 
@@ -395,14 +406,7 @@
                             </div>
                         </div>
 
-                        <div class="product-footer">
-                            <span>
-                                Markup:
-                                {{ "%.0f" | format(
-                                    item.recipe.target_markup
-                                ) }}%
-                            </span>
-
+                        <div class="product-footer product-footer-link-only">
                             <a href="/produk/{{ item.recipe.id }}">
                                 Lihat butiran &rarr;
                             </a>

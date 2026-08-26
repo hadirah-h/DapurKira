@@ -23,11 +23,13 @@
 
         <p>
             Satu batch menghasilkan
-            <strong>{{ recipe.yield_qty }} unit</strong>
-            dengan target markup
             <strong>
-                {{ "%.0f" | format(recipe.target_markup) }}%
-            </strong>.
+                {{ recipe.yield_qty }} unit jualan
+            </strong>
+            dengan target markup
+            <strong>{{ "%.0f" | format(
+                recipe.target_markup
+            ) }}%</strong>.
         </p>
 
     </header>
@@ -54,18 +56,23 @@
 
         <section class="detail-summary">
 
-            <div class="main-result">
-                <span>Harga jual dicadangkan</span>
+            <header class="detail-summary-heading">
+                <h2>Ringkasan kos</h2>
 
-                <strong>
-                    RM{{ "%.2f" | format(result.selling_price) }}
-                </strong>
-            </div>
+                <p>
+                    Kos berdasarkan satu batch yang menghasilkan
+                    <strong>
+                        {{ recipe.yield_qty }} unit jualan
+                    </strong>.
+                </p>
+            </header>
 
-            <div class="result-grid">
+            <!-- Cost information -->
+
+            <div class="result-grid detail-cost-grid">
 
                 <div class="result-item">
-                    <span>Jumlah kos batch</span>
+                    <span>Jumlah kos satu batch</span>
 
                     <strong>
                         RM{{ "%.2f" | format(
@@ -75,7 +82,7 @@
                 </div>
 
                 <div class="result-item">
-                    <span>Kos seunit</span>
+                    <span>Kos seunit jualan</span>
 
                     <strong>
                         RM{{ "%.2f" | format(
@@ -84,8 +91,52 @@
                     </strong>
                 </div>
 
+            </div>
+
+            <!-- Selling price -->
+
+            <div class="main-result">
+                <span>
+                    {% if recipe.custom_selling_price is not none %}
+                        Harga jual anda seunit
+                    {% else %}
+                        Harga jual dicadangkan seunit
+                    {% endif %}
+                </span>
+
+                <strong>
+                    RM{{ "%.2f" | format(
+                        result.selling_price
+                    ) }}
+                </strong>
+
+                <small class="main-result-markup">
+                    {% if recipe.custom_selling_price is not none %}
+                        Markup sebenar pada harga ini:
+                    {% else %}
+                        Markup digunakan:
+                    {% endif %}
+
+                    <span>
+                        {{ "%.2f" | format(
+                            result.calculated_markup
+                        ) }}%
+                    </span>
+                </small>
+
+                </div>
+            </div>
+
+            <!-- Pricing outcome -->
+
+            <div class="detail-outcome-heading">
+                <h3>Hasil pada harga ini</h3>
+            </div>
+
+            <div class="result-grid detail-outcome-grid">
+
                 <div class="result-item profit-result">
-                    <span>Untung seunit</span>
+                    <span>Untung kasar seunit</span>
 
                     <strong>
                         RM{{ "%.2f" | format(
@@ -649,6 +700,8 @@
                         </option>
 
                         <option value="pcs">pcs</option>
+                        <option value="g">g</option>
+                        <option value="kg">kg</option>
                         <option value="cm">cm</option>
                         <option value="m">m</option>
                         <option value="ml">ml</option>
@@ -696,6 +749,8 @@
                             </option>
 
                             <option value="pcs">pcs</option>
+                            <option value="g">g</option>
+                            <option value="kg">kg</option>
                             <option value="cm">cm</option>
                             <option value="m">m</option>
                             <option value="ml">ml</option>

@@ -135,12 +135,13 @@ Target Jual | DapurKira
                 <span class="planner-step">02</span>
 
                 <div>
-                    <h2>Pilih kos bulanan yang berkaitan</h2>
+                    <h2>Pilih kos overhead yang berkaitan</h2>
 
-                    <p>
-                        Buka dan isi bahagian yang anda perlukan sahaja.
-                        Semua bahagian ini adalah pilihan.
-                    </p>
+                        <p>
+                            Kos overhead ialah kos operasi bisnes seperti utiliti,
+                            peralatan, sewa dan langganan bulanan. Buka dan isi
+                            bahagian yang berkaitan sahaja. Semua bahagian ini adalah pilihan.
+                        </p>
                 </div>
             </header>
 
@@ -393,134 +394,197 @@ Target Jual | DapurKira
 
     </form>
 
-    <!-- Results -->
+<!-- Results -->
 
-    <section
-        id="break-even-result-card"
-        class="planner-result-card"
-        hidden
-    >
+<section
+    id="break-even-result-card"
+    class="planner-result-card"
+    hidden
+>
 
-        <header class="planner-result-heading">
+    <header class="planner-result-heading">
+        <div>
+            <span class="eyebrow">
+                Ringkasan Cik Kira
+            </span>
+
+            <h2>Target jual anda</h2>
+        </div>
+
+        <span
+            class="planner-result-sparkle"
+            aria-hidden="true"
+        >
+            &#10022;
+        </span>
+    </header>
+
+    <!-- Monthly cost breakdown -->
+
+    <div class="planner-result-breakdown">
+
+        <div class="breakdown-heading">
+            <h3>
+                Dari mana datangnya jumlah kos overhead bulanan?
+            </h3>
+        </div>
+
+        <div class="planner-breakdown-grid">
+
             <div>
-                <span class="eyebrow">Ringkasan Cik Kira</span>
-                <h2>Target jual anda</h2>
+                <span>Kos tetap lain</span>
+
+                <strong>
+                    RM<span id="result-other-fixed-cost">0.00</span>
+                </strong>
             </div>
 
-            <span class="planner-result-sparkle" aria-hidden="true">
-                &#10022;
-            </span>
-        </header>
+            <div>
+                <span>Anggaran utiliti bisnes</span>
 
-        <div class="planner-main-target">
-            <span>Target minimum sebulan</span>
+                <strong>
+                    RM<span id="result-utility-cost">0.00</span>
+                </strong>
+            </div>
+
+            <div>
+                <span>Peralatan sebulan</span>
+
+                <strong>
+                    RM<span id="result-equipment-cost">0.00</span>
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- How the minimum target is calculated -->
+
+    <div class="planner-coverage-card">
+
+        <div class="coverage-value">
+            <span>Jumlah kos overhead bulanan</span>
+
+            <strong>
+                RM<span id="result-monthly-fixed-cost">0.00</span>
+            </strong>
+        </div>
+
+        <span class="coverage-symbol" aria-hidden="true">
+            &divide;
+        </span>
+
+        <div class="coverage-value">
+            <span>Untung kasar seunit</span>
+
+            <small class="coverage-help">
+                Harga jual &minus; kos seunit
+            </small>
+
+            <strong>
+                RM<span id="result-break-even-profit">0.00</span>
+            </strong>
+        </div>
+
+        <span class="coverage-symbol" aria-hidden="true">
+            =
+        </span>
+
+        <div class="coverage-value coverage-main-value">
+            <span>Minimum perlu dijual</span>
 
             <strong>
                 <span id="result-break-even-monthly">0</span>
-                <small>unit</small>
+                <small>unit sebulan</small>
             </strong>
-
-            <p>
-                Anggaran minimum untuk cover semua kos bulanan.
-            </p>
         </div>
 
-        <div class="planner-target-grid">
+    </div>
 
-            <div class="planner-target-item">
-                <span>Seminggu</span>
+    <p
+        id="result-break-even-formula"
+        class="coverage-explanation"
+    ></p>
 
-                <strong>
-                    <span id="result-break-even-weekly">0</span>
-                    unit
-                </strong>
-            </div>
+    <!-- Smaller time estimates -->
 
-            <div class="planner-target-item">
-                <span>Sehari</span>
+    <div class="planner-target-grid">
 
-                <strong>
-                    <span id="result-break-even-daily">0</span>
-                    unit
-                </strong>
-            </div>
+        <div class="planner-target-item">
+            <span>Anggaran seminggu</span>
 
-            <div class="planner-target-item profit-target-item">
-                <span>Untung seunit</span>
-
-                <strong>
-                    RM<span id="result-break-even-profit">0.00</span>
-                </strong>
-            </div>
-
+            <strong>
+                <span id="result-break-even-weekly">0</span>
+                unit
+            </strong>
         </div>
 
-        <div class="planner-result-breakdown">
+        <div class="planner-target-item">
+            <span>Anggaran sehari</span>
 
-            <h3>Pecahan kos bulanan</h3>
-
-            <div class="planner-breakdown-grid">
-
-                <div>
-                    <span>Jumlah kos tetap</span>
-
-                    <strong>
-                        RM<span id="result-monthly-fixed-cost">0.00</span>
-                    </strong>
-                </div>
-
-                <div>
-                    <span>Anggaran utiliti bisnes</span>
-
-                    <strong>
-                        RM<span id="result-utility-cost">0.00</span>
-                    </strong>
-                </div>
-
-                <div>
-                    <span>Peralatan sebulan</span>
-
-                    <strong>
-                        RM<span id="result-equipment-cost">0.00</span>
-                    </strong>
-                </div>
-
-            </div>
-
+            <strong>
+                <span id="result-break-even-daily">0</span>
+                unit
+            </strong>
         </div>
 
-        <div
-            id="target-income-result"
-            class="planner-income-result"
-            hidden
-        >
-            <span>Untuk capai target pendapatan</span>
+    </div>
 
+
+    <!-- Optional income target -->
+
+    <div
+        id="target-income-result"
+        class="planner-income-result"
+        hidden
+    >
+
+        <div class="income-target-heading">
+            <span>Target pendapatan pilihan anda</span>
+
+            <strong>
+                RM<span id="result-target-income-amount">0.00</span>
+                sebulan
+            </strong>
+        </div>
+
+        <p>
+            Untuk cover kos bulanan dan capai target pendapatan
+            tersebut, sasarkan:
+        </p>
+
+        <div class="income-target-main">
             <strong>
                 <span id="result-target-monthly">0</span>
                 unit sebulan
             </strong>
-
-            <p>
-                <span id="result-target-weekly">0</span>
-                unit seminggu &middot;
-                <span id="result-target-daily">0</span>
-                unit sehari
-            </p>
         </div>
 
-        <p class="result-note">
-            Target ini ialah panduan berdasarkan maklumat yang
-            anda masukkan. Sesuaikan dengan kemampuan pengeluaran
-            dan keadaan bisnes anda.
-        </p>
+        <div class="income-target-periods">
+            <span>
+                <strong id="result-target-weekly">0</strong>
+                unit seminggu
+            </span>
 
-    </section>
+            <span>
+                <strong id="result-target-daily">0</strong>
+                unit sehari
+            </span>
+        </div>
+
+    </div>
+
+    <p class="result-note">
+        Target ini ialah panduan berdasarkan maklumat yang
+        anda masukkan. Sesuaikan dengan kemampuan pengeluaran
+        dan keadaan bisnes anda.
+    </p>
 
 </section>
 
 <script
-    src="{{ url_for('static', path='/js/break_even.js') }}?v=3"
+    src="{{ url_for('static', path='/js/break_even.js') }}?v=5"
     defer
 ></script>
 

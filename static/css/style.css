@@ -1526,8 +1526,12 @@ main {
     margin-top: 25px;
 
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 10px;
+}
+
+.product-footer-link-only {
+    justify-content: flex-end;
 }
 
 .price-item {
@@ -2413,6 +2417,25 @@ select.form-input {
     line-height: 1.1;
 }
 
+.main-result-markup {
+    width: fit-content;
+    margin-top: 13px;
+    padding: 6px 10px;
+    display: block;
+
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.main-result-markup span {
+    font-weight: 900;
+}
+
 .result-grid {
     margin-top: 15px;
 
@@ -3048,7 +3071,7 @@ select.form-input {
     }
 
     .price-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .product-heading {
@@ -3604,8 +3627,8 @@ select.form-input {
 
     background:
         radial-gradient(
-            circle at 92% 10%,
-            rgba(201, 180, 229, 0.4),
+            circle at 92% 8%,
+            rgba(201, 180, 229, 0.45),
             transparent 25%
         ),
         var(--surface);
@@ -3642,8 +3665,20 @@ select.form-input {
     font-size: 2rem;
 }
 
-.planner-main-target {
-    padding: 28px;
+/* Monthly cost equation */
+
+.planner-coverage-card {
+    padding: 20px;
+
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1fr)
+        34px
+        minmax(0, 1fr)
+        34px
+        minmax(0, 1.1fr);
+    align-items: stretch;
+    gap: 10px;
 
     background: linear-gradient(
         135deg,
@@ -3654,54 +3689,99 @@ select.form-input {
 
     border: 1px solid rgba(201, 180, 229, 0.9);
     border-radius: 22px;
+}
+
+.coverage-value {
+    min-height: 130px;
+    padding: 20px 16px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(255, 255, 255, 0.58);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    border-radius: 17px;
+
     text-align: center;
 }
 
-.planner-main-target > span {
+.coverage-value > span {
     color: var(--brown-soft);
-    font-size: 0.8rem;
+    font-size: 0.76rem;
     font-weight: 900;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    line-height: 1.35;
 }
 
-.planner-main-target > strong {
-    margin-top: 5px;
-
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: 8px;
+.coverage-value > strong {
+    margin-top: 7px;
 
     color: var(--brown);
-    font-size: clamp(2.7rem, 7vw, 4.5rem);
+    font-size: clamp(1.4rem, 3vw, 2rem);
     font-weight: 900;
-    letter-spacing: -0.06em;
-    line-height: 1;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
 }
 
-.planner-main-target > strong small {
-    font-size: 1rem;
+.coverage-value > strong span {
+    display: inline;
+}
+
+.coverage-value > strong small {
+    display: block;
+    margin-top: 5px;
+
+    font-size: 0.72rem;
     letter-spacing: 0;
 }
 
-.planner-main-target p {
-    margin-top: 10px;
-
-    color: var(--brown-soft);
-    font-size: 0.84rem;
+.coverage-main-value {
+    background: rgba(255, 255, 255, 0.88);
+    border-color: rgba(220, 96, 141, 0.4);
 }
+
+.coverage-main-value > strong {
+    color: var(--primary-dark);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+}
+
+.coverage-symbol {
+    display: grid;
+    place-items: center;
+
+    color: var(--primary-dark);
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+
+.coverage-explanation {
+    margin: 14px auto 0;
+    padding: 10px 14px;
+
+    background: var(--lavender-soft);
+    border: 1px solid var(--lavender);
+    border-radius: 12px;
+
+    color: var(--lavender-dark);
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.55;
+    text-align: center;
+}
+
+/* Weekly and daily estimates */
 
 .planner-target-grid {
     margin-top: 16px;
 
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
 }
 
 .planner-target-item {
-    padding: 18px;
+    padding: 17px 18px;
 
     background: var(--background);
     border: 1px solid var(--border);
@@ -3721,35 +3801,36 @@ select.form-input {
     margin-top: 4px;
 
     color: var(--brown);
-    font-size: 1.1rem;
+    font-size: 1.08rem;
     font-weight: 900;
 }
 
-.profit-target-item {
-    background: var(--mint-soft);
-    border-color: var(--mint);
-}
-
-.profit-target-item > span,
-.profit-target-item strong {
-    color: var(--mint-dark);
-}
-
-/* Cost breakdown */
+/* Monthly cost breakdown */
 
 .planner-result-breakdown {
-    margin-top: 20px;
-    padding-top: 20px;
+    margin: 0 0 22px;
+    padding: 20px;
 
-    border-top: 1px solid var(--border);
+    background: var(--lavender-soft);
+    border: 1px solid var(--lavender);
+    border-radius: 20px;
 }
 
-.planner-result-breakdown h3 {
-    margin-bottom: 12px;
+.breakdown-heading {
+    margin-bottom: 13px;
+}
 
+.breakdown-heading h3 {
     color: var(--brown);
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 900;
+}
+
+.breakdown-heading p {
+    margin-top: 2px;
+
+    color: var(--brown-soft);
+    font-size: 0.78rem;
 }
 
 .planner-breakdown-grid {
@@ -3759,63 +3840,174 @@ select.form-input {
 }
 
 .planner-breakdown-grid > div {
-    padding: 14px;
+    padding: 17px;
 
     background: var(--lavender-soft);
-    border: 1px solid rgba(201, 180, 229, 0.75);
-    border-radius: 14px;
+    border: 1px solid rgba(201, 180, 229, 0.8);
+    border-radius: 15px;
 }
 
-.planner-breakdown-grid span {
+.planner-breakdown-grid > div > span {
     display: block;
 
     color: var(--lavender-dark);
-    font-size: 0.72rem;
-    font-weight: 700;
+    font-size: 0.76rem;
+    font-weight: 800;
+    line-height: 1.4;
 }
 
 .planner-breakdown-grid strong {
     display: block;
-    margin-top: 3px;
+    margin-top: 7px;
 
     color: var(--lavender-dark);
-    font-size: 0.94rem;
+    font-size: 1.25rem;
     font-weight: 900;
+    line-height: 1.2;
 }
 
-/* Optional income result */
+.planner-breakdown-grid strong span {
+    display: inline;
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+/* Optional income target */
 
 .planner-income-result {
-    margin-top: 18px;
-    padding: 20px;
+    margin-top: 20px;
+    padding: 22px;
 
     display: grid;
-    gap: 3px;
+    gap: 14px;
 
-    background: var(--mint-soft);
+    background: linear-gradient(
+        135deg,
+        var(--mint-soft),
+        #e7f7f1
+    );
+
     border: 1px solid var(--mint);
-    border-radius: 17px;
+    border-radius: 19px;
 }
 
-.planner-income-result > span {
+.income-target-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.income-target-heading > span {
     color: var(--mint-dark);
     font-size: 0.78rem;
     font-weight: 800;
 }
 
-.planner-income-result strong {
+.income-target-heading > strong {
     color: var(--mint-dark);
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     font-weight: 900;
 }
 
-.planner-income-result p {
+.income-target-heading strong span {
+    display: inline;
+}
+
+.planner-income-result > p {
     color: var(--mint-dark);
-    font-size: 0.82rem;
+    font-size: 0.84rem;
+    line-height: 1.5;
+}
+
+.income-target-main {
+    padding: 18px;
+
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(159, 207, 190, 0.9);
+    border-radius: 15px;
+}
+
+.income-target-main strong {
+    color: var(--mint-dark);
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 900;
+}
+
+.income-target-periods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.income-target-periods > span {
+    padding: 7px 11px;
+
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(159, 207, 190, 0.8);
+    border-radius: 999px;
+
+    color: var(--mint-dark);
+    font-size: 0.78rem;
+}
+
+.income-target-periods strong {
+    font-weight: 900;
 }
 
 .planner-result-card .result-note {
     margin-top: 20px;
+}
+
+
+/* Responsive result layout */
+
+@media (max-width: 760px) {
+    .planner-coverage-card {
+        grid-template-columns: 1fr;
+    }
+
+    .coverage-symbol {
+        min-height: 22px;
+    }
+
+    .coverage-value {
+        min-height: 105px;
+    }
+
+    .planner-breakdown-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .income-target-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+@media (max-width: 500px) {
+    .planner-result-card {
+        padding: 19px;
+    }
+
+    .planner-target-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .planner-coverage-card {
+        padding: 14px;
+    }
+
+    .coverage-value {
+        padding: 17px 13px;
+    }
+
+    .income-target-periods {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
 
 /* Preserve the HTML hidden state */
@@ -3924,4 +4116,98 @@ select.form-input {
     .planner-breakdown-grid {
         grid-template-columns: 1fr;
     }
+}
+
+
+.coverage-help {
+    margin-top: 3px;
+
+    color: var(--brown-soft);
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+.coverage-value > .coverage-help + strong {
+    margin-top: 7px;
+}
+
+.batch-result-recap {
+    margin-bottom: 16px;
+    padding: 14px 16px;
+
+    background: var(--butter-soft);
+    border: 1px solid var(--butter);
+    border-radius: 14px;
+}
+
+.batch-result-recap > span {
+    display: block;
+
+    color: var(--butter-dark);
+    font-size: 0.7rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.batch-result-recap p {
+    margin-top: 4px;
+
+    color: var(--brown-soft);
+    font-size: 0.86rem;
+    line-height: 1.55;
+}
+
+.batch-result-recap strong {
+    color: var(--brown);
+    font-weight: 900;
+}
+
+.product-detail-page .calculator-header {
+    margin-bottom: 14px;
+}
+
+.detail-actions {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.detail-summary-heading h2 {
+    color: var(--brown);
+    font-size: 1.15rem;
+    font-weight: 900;
+}
+
+.detail-summary-heading p {
+    margin-top: 3px;
+
+    color: var(--brown-soft);
+    font-size: 0.8rem;
+}
+
+.detail-summary-heading p strong {
+    color: var(--brown);
+    font-weight: 900;
+}
+
+.detail-cost-grid {
+    margin-top: 14px;
+}
+
+.detail-summary .main-result {
+    margin-top: 20px;
+}
+
+.detail-outcome-heading {
+    margin-top: 22px;
+}
+
+.detail-outcome-heading h3 {
+    color: var(--brown);
+    font-size: 0.9rem;
+    font-weight: 900;
+}
+
+.detail-outcome-grid {
+    margin-top: 10px;
 }

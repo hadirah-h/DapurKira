@@ -190,6 +190,22 @@ Kira Pantas | DapurKira
                     <h2>Cadangan harga anda</h2>
                 </div>
 
+                <div class="batch-result-recap">
+                    <span>Ringkasan batch</span>
+
+                    <p>
+                        Dengan kos satu batch sebanyak
+                        <strong>
+                            RM<span id="result-batch-cost">0.00</span>
+                        </strong>,
+                        anda menghasilkan
+                        <strong>
+                            <span id="result-yield-qty">0</span>
+                            unit jualan
+                        </strong>.
+                    </p>
+                </div>
+
                 <div class="main-result">
                     <span>Harga jual dicadangkan</span>
 
@@ -251,7 +267,7 @@ Kira Pantas | DapurKira
 </section>
 
 <script
-    src="{{ url_for('static', path='/js/quick_calculate.js') }}"
+    src="{{ url_for('static', path='/js/quick_calculate.js') }}?v=2"
     defer
 ></script>
 
