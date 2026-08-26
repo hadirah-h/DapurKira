@@ -220,8 +220,8 @@
 
             <p>
                 Dah tahu jumlah kos satu batch? Masukkan kos,
-                kuantiti hasil dan markup untuk dapatkan
-                anggaran harga jual.
+                jumlah unit yang dihasilkan dan markup untuk
+                mendapatkan anggaran harga jual.
             </p>
 
             <a class="text-link" href="/kira-pantas">
@@ -269,7 +269,7 @@
 
             <p>
                 Nak tahu berapa unit perlu dijual? Cik Kira
-                boleh bantu kira untuk cover kos dan capai
+                boleh bantu kira untuk tampung kos dan capai
                 target pendapatan.
             </p>
 
@@ -366,7 +366,7 @@
                     {% if item.result %}
                         <div class="price-grid">
                             <div class="price-item">
-                                <span>Kos seunit</span>
+                                <span>Kos seunit jualan</span>
 
                                 <strong>
                                     RM{{ "%.2f" | format(
@@ -379,14 +379,20 @@
                                 <span>Markup</span>
 
                                 <strong>
-                                    {{ "%.0f" | format(
-                                        item.recipe.target_markup
+                                    {{ "%.2f" | format(
+                                        item.result.calculated_markup
                                     ) }}%
                                 </strong>
                             </div>
 
                             <div class="price-item highlighted-price">
-                                <span>Harga cadangan</span>
+                                <span>
+                                    {% if item.recipe.custom_selling_price is not none %}
+                                        Harga jual anda
+                                    {% else %}
+                                        Harga jual dicadangkan
+                                    {% endif %}
+                                </span>
 
                                 <strong>
                                     RM{{ "%.2f" | format(
@@ -396,7 +402,7 @@
                             </div>
 
                             <div class="price-item">
-                                <span>Margin</span>
+                                <span>Margin keuntungan</span>
 
                                 <strong>
                                     {{ "%.2f" | format(

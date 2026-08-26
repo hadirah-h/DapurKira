@@ -50,6 +50,10 @@ const sellingPriceResult = document.querySelector(
     "#result-selling-price"
 );
 
+const sellingPriceLabel = document.querySelector(
+    "#result-selling-price-label"
+);
+
 const costPerItemResult = document.querySelector(
     "#result-cost-per-item"
 );
@@ -124,6 +128,10 @@ function displayResults(result) {
     yieldQtyResult.textContent = Number(
         yieldInput.value
     );
+
+    sellingPriceLabel.textContent = customPriceInput.value.trim()
+        ? "Harga jual anda seunit"
+        : "Harga jual dicadangkan seunit";
 
     sellingPriceResult.textContent = (
         result.selling_price.toFixed(2)

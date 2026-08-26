@@ -26,8 +26,9 @@ Kira Pantas | DapurKira
         <h1>Kira harga jual dengan cepat</h1>
 
         <p>
-            Masukkan kos batch dan jumlah produk.
-            Cik Kira akan cadangkan harga jual untuk anda.
+            Masukkan kos satu batch dan jumlah unit yang dihasilkan.
+            Cik Kira akan cadangkan harga jual seunit
+            untuk anda.
         </p>
     </header>
 
@@ -64,7 +65,7 @@ Kira Pantas | DapurKira
 
                 <div class="form-group">
                     <label for="yield-qty">
-                        Berapa unit yang dihasilkan?
+                        Berapa unit jualan dihasilkan daripada satu batch?
                     </label>
 
                     <p class="field-help">
@@ -97,9 +98,10 @@ Kira Pantas | DapurKira
                             </label>
 
                             <p class="field-help">
-                                Tambahan harga berdasarkan kos seunit.
+                                Pilih peratus markup untuk menentukan harga jual.
+                                Markup ialah tambahan daripada kos seunit.
                             </p>
-                        </div>
+                            </div>
 
                         <output
                             id="markup-output"
@@ -187,11 +189,11 @@ Kira Pantas | DapurKira
 
                 <div class="result-heading">
                     <span>Ringkasan Cik Kira</span>
-                    <h2>Cadangan harga anda</h2>
+                    <h2>Ringkasan harga jual</h2>
                 </div>
 
                 <div class="batch-result-recap">
-                    <span>Ringkasan batch</span>
+                    <span>Ringkasan satu batch</span>
 
                     <p>
                         Dengan kos satu batch sebanyak
@@ -207,7 +209,9 @@ Kira Pantas | DapurKira
                 </div>
 
                 <div class="main-result">
-                    <span>Harga jual dicadangkan</span>
+                    <span id="result-selling-price-label">
+                        Harga jual dicadangkan seunit
+                    </span>
 
                     <strong>
                         RM
@@ -218,7 +222,7 @@ Kira Pantas | DapurKira
                 <div class="result-grid">
 
                     <div class="result-item">
-                        <span>Kos seunit</span>
+                        <span>Kos seunit jualan</span>
 
                         <strong>
                             RM
@@ -227,7 +231,7 @@ Kira Pantas | DapurKira
                     </div>
 
                     <div class="result-item profit-result">
-                        <span>Untung seunit</span>
+                        <span>Untung kasar seunit</span>
 
                         <strong>
                             RM
@@ -254,8 +258,8 @@ Kira Pantas | DapurKira
                 </div>
 
                 <p class="result-note">
-                    Harga ini ialah panduan. Anda masih boleh
-                    melaraskan harga mengikut pasaran dan pelanggan.
+                    Harga jual ini ialah panduan. Anda masih boleh
+                    melaraskannya mengikut pasaran dan pelanggan.
                 </p>
 
             </div>
@@ -267,7 +271,7 @@ Kira Pantas | DapurKira
 </section>
 
 <script
-    src="{{ url_for('static', path='/js/quick_calculate.js') }}?v=2"
+    src="{{ url_for('static', path='/js/quick_calculate.js') }}?v=3"
     defer
 ></script>
 

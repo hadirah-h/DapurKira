@@ -25,11 +25,7 @@
             Satu batch menghasilkan
             <strong>
                 {{ recipe.yield_qty }} unit jualan
-            </strong>
-            dengan target markup
-            <strong>{{ "%.0f" | format(
-                recipe.target_markup
-            ) }}%</strong>.
+            </strong>.
         </p>
 
     </header>
@@ -57,10 +53,10 @@
         <section class="detail-summary">
 
             <header class="detail-summary-heading">
-                <h2>Ringkasan kos</h2>
+                <h2>Ringkasan harga jual</h2>
 
                 <p>
-                    Kos berdasarkan satu batch yang menghasilkan
+                    Pengiraan berdasarkan satu batch yang menghasilkan
                     <strong>
                         {{ recipe.yield_qty }} unit jualan
                     </strong>.
@@ -809,11 +805,10 @@
                         Langkah 3
                     </span>
 
-                    <h2>Ringkasan kos</h2>
+                    <h2>Pecahan kos satu batch</h2>
 
                     <p>
-                        Semak bagaimana jumlah kos satu batch
-                        dikira.
+                        Lihat dari mana datangnya jumlah kos produk ini.
                     </p>
                 </div>
 
@@ -920,7 +915,7 @@
                         <span>Jumlah kos satu batch</span>
 
                         <p>
-                            Untuk {{ recipe.yield_qty }} unit
+                            Untuk {{ recipe.yield_qty }} unit jualan
                         </p>
                     </div>
 
