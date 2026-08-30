@@ -21,6 +21,46 @@ The project began as a command-line calculator. It later evolved into a full-sta
 
 The original terminal version is preserved in `learning/cli_prototype.py` to document this learning journey.
 
+## Application Screenshots
+
+### Dashboard
+
+The dashboard introduces DapurKira’s three calculation modes and provides quick access to the main features.
+
+![DapurKira dashboard](docs/images/dashboard.png)
+
+### Produk Saya and Product Categories
+
+Saved products are organised by food category, making them easier to filter and review. Each product card displays its yield and calculated pricing summary.
+
+![DapurKira saved products and category filters](docs/images/my-products-categories.png)
+
+### Mode 1: Kira Pantas
+
+The quick calculator estimates cost per unit, selling price, gross profit, markup, and profit margin from a few basic inputs.
+
+![DapurKira quick calculator](docs/images/quick-calculator.png)
+
+### Mode 2: Detailed Product Costing
+
+Users can save a product and record its ingredients, packaging, labour, and other costs.
+
+![DapurKira detailed product calculator](docs/images/detailed-calculator.png)
+
+The application calculates the actual cost of every ingredient and packaging item based on the purchase size and quantity used.
+
+![DapurKira ingredient and packaging calculations](docs/images/detailed-calculator-02.png)
+
+It then presents the total batch cost, cost per selling unit, suggested selling price, gross profit, markup, and resulting profit margin.
+
+![DapurKira product costing results](docs/images/detailed-calculator-03.png)
+
+### Mode 3: Break-Even and Sales Target
+
+The break-even calculator uses monthly overhead and gross profit per unit to estimate the minimum number of units that should be sold.
+
+![DapurKira break-even calculator](docs/images/break-even.png)
+
 ## Development Approach and AI Assistance
 
 I learned the foundations of Python through a Python bootcamp, including
