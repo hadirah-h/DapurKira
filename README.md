@@ -43,17 +43,19 @@ The quick calculator estimates cost per unit, selling price, gross profit, marku
 
 ### Mode 2: Detailed Product Costing
 
-Users can save a product and record its ingredients, packaging, labour, and other costs.
+When users open a saved product, DapurKira displays the most important pricing results first: total batch cost, cost per selling unit, suggested selling price, gross profit, markup, and profit margin.
 
-![DapurKira detailed product calculator](docs/images/detailed-calculator.png)
+This result-first layout allows homepreneurs to understand their current pricing position immediately without having to scroll through every cost record.
 
-The application calculates the actual cost of every ingredient and packaging item based on the purchase size and quantity used.
+![DapurKira product pricing summary](docs/images/detailed-calculator.png)
 
-![DapurKira ingredient and packaging calculations](docs/images/detailed-calculator-02.png)
+Further down the page, users can review, add, edit, or delete the ingredients used in one batch. DapurKira calculates the actual cost of each ingredient by comparing the purchased quantity with the quantity used.
 
-It then presents the total batch cost, cost per selling unit, suggested selling price, gross profit, markup, and resulting profit margin.
+![DapurKira ingredient cost calculation](docs/images/detailed-calculator-02.png)
 
-![DapurKira product costing results](docs/images/detailed-calculator-03.png)
+The next sections cover packaging, labour, other optional costs, and the complete batch cost breakdown. These details explain how the total cost and suggested selling price were calculated.
+
+![DapurKira packaging and batch cost breakdown](docs/images/detailed-calculator-03.png)
 
 ### Mode 3: Break-Even and Sales Target
 
